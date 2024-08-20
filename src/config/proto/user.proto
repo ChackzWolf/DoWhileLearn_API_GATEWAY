@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+message User {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+    string avatar = 4;
+    string  role = 5;
+    bool isVerified = 6;
+}
+
+
+service UserService {
+    rpc Register (RegisterRequest) returns (RegisterResponse) {};
+}
+
+message RegisterRequest {
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string password = 4;
+}
+
+message RegisterResponse {
+    string msg = 1;
+    bool registrationStatus = 2;
+    Token userData = 3;
+}
+
+message Token {
+    string token = 1;
+}
