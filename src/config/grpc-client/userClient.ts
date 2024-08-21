@@ -1,7 +1,9 @@
 import path from "path";
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
- 
+import  dotenv from "dotenv"
+
+dotenv.config()
 
 
 const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/user.proto"), {
@@ -15,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/use
 const UserService = grpc.loadPackageDefinition(packageDefinition).UserService as grpc.ServiceClientConstructor;
 
 const UserClient   = new UserService(
-    'localhost:4000',grpc.credentials.createInsecure()
+    `0.0.0.0:${process.env.USER_SERVICE_URL}`,grpc.credentials.createInsecure()
 );
 
 export{UserClient};

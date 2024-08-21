@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use("/", userRoute);
 
-app.listen(port, () => {
+
+app.listen(port, () => { 
   console.log(`Server is running on ${port}`);
 });

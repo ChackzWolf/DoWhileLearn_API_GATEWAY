@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { UserClient } from "../../config/grpc-client/userClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 
-export default class UserController {
+export default class UserController {  
 
     register(req: Request, res: Response, next: NextFunction) {
         UserClient.Register(req.body, (err: ServiceError | null, result: any) => {
