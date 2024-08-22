@@ -11,10 +11,24 @@ export default class UserController {
                 console.error(err);
                 res.status(500).send(err.message);
             } else {
-    
-                console.log(result);
+                console.log(result)  
+                const {tempId, success, msg, email} = result;
+                
                 res.status(200).json(result);
-            }
+            } 
         });
     }
+
+    verifyOtp(req:Request, res:Response, next:NextFunction){
+        UserClient.VerifyOTP(req.body,(err: ServiceError | null, result: any)=>{
+            console.log(' trigger api ')
+            if(err){
+                console.error(err);
+                res.status(500).send(err.message);
+            }else {
+                console.log(result)
+                res.status(200).json(result)
+            }
+        }) 
+    } 
 } 
