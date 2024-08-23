@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { UserClient } from "../../config/grpc-client/userClient";
+import { UserClient } from "../../../config/grpc-client/userClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 
 export default class UserController {  
@@ -11,11 +11,9 @@ export default class UserController {
                 console.error(err);
                 res.status(500).send(err.message);
             } else {
-                console.log(result)  
-                const {tempId, success, msg, email} = result;
-                
+                console.log(result) 
                 res.status(200).json(result);
-            } 
+            }
         });
     }
 
@@ -31,4 +29,16 @@ export default class UserController {
             }
         }) 
     } 
+
+    resendOtp(req:Request, res:Response, next:NextFunction){
+        UserClient.ResendOTP(req.body, (err: ServiceError | null, result: any) =>{
+            console.log('triggered resend api')
+            if(err){
+                console.log(err);
+                res.status(500).send(err.message);
+            }else{
+                res.status(200).json(result);  
+            }
+        })
+    }
 } 

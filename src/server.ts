@@ -3,7 +3,7 @@ import express, { Express } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import userRoute from "./modules/user/route";
+import userRoute from "./modules/user/routes/route";
 
 dotenv.config();
 
