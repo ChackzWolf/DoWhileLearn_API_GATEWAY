@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UserClient } from "../../../config/grpc-client/userClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
+import { StatusCode } from "../../../interface/enums";
 
 export default class UserController {  
 
@@ -14,7 +15,7 @@ export default class UserController {
                 console.log(result) 
                 res.status(200).json(result);
             }
-        });
+        }); 
     }
 
     verifyOtp(req: Request, res: Response, next: NextFunction): void {
@@ -25,7 +26,7 @@ export default class UserController {
             }
     
             if (result && result.token) {
-                
+
                 res.cookie('jwt', result.token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production', // Ensure HTTPS in production
@@ -48,6 +49,17 @@ export default class UserController {
                 res.status(500).send(err.message);
             }else{
                 res.status(200).json(result);  
+            }
+        })
+    }
+
+    userLogin (req:Request, res:Response, next:NextFunction){
+        UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) =>{
+            if(err){
+                console.log(err);
+                res.status(500).send(err.message);
+            }else{
+                res.status(StatusCode.Created).send(result);
             }
         })
     }

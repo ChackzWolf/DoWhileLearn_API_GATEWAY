@@ -1,23 +1,17 @@
 syntax = "proto3";
 
-message User {
-    string firstName = 1;
-    string lastName = 2;
-    string email = 3;
-    string password = 4;
-}
-
 service UserService {
     rpc Register (RegisterRequest) returns (RegisterResponse) {};
     rpc VerifyOTP (OTPRequest) returns (OTPResponse);
     rpc ResendOTP (OTPRequest) returns (OTPResponse);
-}
+    rpc UserLogin (LoginRequest) returns (LoginResponse);
+} 
 
-message RegisterRequest {
-    string firstName = 1;
-    string lastName = 2;
-    string email = 3;
-    string password = 4;
+message RegisterRequest{
+    string firstName=1;
+    string lastName=2;
+    string email=3;
+    string password=4;
 }
 
 message RegisterResponse {
@@ -34,14 +28,27 @@ message UserData {
     string email=3;
     string password=4;
 }
+
+
 message OTPRequest {
-    string email =1;
-    string enteredOTP =2 ; 
+    string email = 1;
+    string enteredOTP = 2;
     string tempId = 3;
 }
 
 message OTPResponse {
-    string msg =1;
-    string token =2;
-    bool success=3;
+    string msg = 1;
+    string token = 2;
+    bool success = 3;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    bool success = 1;
+    string token = 2;
+    string msg = 3;
 }

@@ -8,7 +8,7 @@ const controller = new UserController();
 userRoute.post("/register", controller.register);
 userRoute.post('/verifyOTP', controller.verifyOtp);
 userRoute.post('/resendOTP', controller.resendOtp);
-userRoute.post("/login",)
+userRoute.post("/login", )
 
 
 
