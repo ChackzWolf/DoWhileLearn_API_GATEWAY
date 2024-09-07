@@ -17,8 +17,12 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/cou
 const CourseService = grpc.loadPackageDefinition(packageDefinition).CourseService as grpc.ServiceClientConstructor;
 
 const CourseClient   = new CourseService(
-    `0.0.0.0:${process.env.COURSE_SERVICE_PORT}`,grpc.credentials.createInsecure()
+    `0.0.0.0:${process.env.COURSE_SERVICE_PORT}`,grpc.credentials.createInsecure(),
+    {
+        'grpc.max_send_message_length': 100 * 1024 * 1024, // 100 MB
+        'grpc.max_receive_message_length': 100 * 1024 * 1024 // 100 MB
+    }
 );
 
 export{CourseClient};
- 
+  

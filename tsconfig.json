@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                                 // Set the JavaScript language version for emitted JavaScript
+    "module": "commonjs",                               // Specify the module code generation
+    "strict": true,                                    // Enable all strict type-checking options
+    "esModuleInterop": true,                            // Enable compatibility with CommonJS modules
+    "forceConsistentCasingInFileNames": true,           // Ensure file names are case-sensitive
+    "skipLibCheck": true,                              // Skip type checking of declaration files
+    "typeRoots": ["./node_modules/@types", "./src/types"], // Include custom types
+    "resolveJsonModule": true,                          // Enable importing .json files
+    "baseUrl": "./",                                   // Base directory to resolve non-relative module names
+    "paths": {                                          // Map module paths
+      "@/*": ["src/*"]
+    },
+    "noEmitOnError": true,                             // Disable emitting files if there are errors
+    "sourceMap": true,                                // Create source map files for emitted JavaScript
+    "outDir": "./dist"                                // Specify an output folder for all emitted files
+  },
+  "include": [
+    "src/**/*.ts"  // Include all TypeScript files in the `src` directory
+  ],
+  "exclude": [
+    "node_modules"  // Exclude `node_modules` directory
+  ]
+}
