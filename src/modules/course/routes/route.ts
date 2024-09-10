@@ -7,5 +7,6 @@ courseRoute.use(express.json());
 const controller = new CourseController();
 
 courseRoute.post("/upload", controller.UploadVideo);
+courseRoute.post("/imageUpload", controller.UploadImage);
 
 export default courseRoute;

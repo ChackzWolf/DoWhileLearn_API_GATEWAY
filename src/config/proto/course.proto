@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service CourseService {
   rpc UploadVideo(VideoRequest) returns (VideoResponse);
+  rpc UploadImage(ImageRequest) returns (ImageResponse);
 }
 
 message VideoRequest {
@@ -11,4 +12,16 @@ message VideoRequest {
 message VideoResponse {
   string message = 1;
   string s3Url = 2;
+  bool success = 3;
+}
+
+message ImageRequest {
+  bytes imageBinary = 1;
+  string imageName = 2;
+}
+
+message ImageResponse {
+  string message = 1;
+  string s3Url = 2;
+  bool success = 3;
 }

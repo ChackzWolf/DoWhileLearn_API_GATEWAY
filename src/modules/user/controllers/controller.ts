@@ -68,7 +68,12 @@ export default class UserController {
             }else{
                 if(success){
                     const {refreshToken, accessToken} = createToken(useData, "USER")
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken});
+                    res.cookie('refreshToken', refreshToken, { 
+                        httpOnly: true, 
+                        secure: true, // Make sure to use 'secure' in production with HTTPS
+                        sameSite: 'strict' 
+                    });
+                    res.status(StatusCode.Created).send({message, success, accessToken});
                 }
             }
             
@@ -98,7 +103,7 @@ export default class UserController {
                 process.env.JWT_SECRET as string,
                 { expiresIn: '15m' }
             );
-    
+            
             res.json({ accessToken });
         });
     }    

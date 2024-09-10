@@ -10,7 +10,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/cou
     keepCase: true,
     longs: String,
     enums: String, 
-    defaults: true,
+    defaults: true, 
     oneofs: true
 }); 
 
@@ -19,8 +19,8 @@ const CourseService = grpc.loadPackageDefinition(packageDefinition).CourseServic
 const CourseClient   = new CourseService(
     `0.0.0.0:${process.env.COURSE_SERVICE_PORT}`,grpc.credentials.createInsecure(),
     {
-        'grpc.max_send_message_length': 100 * 1024 * 1024, // 100 MB
-        'grpc.max_receive_message_length': 100 * 1024 * 1024 // 100 MB
+        'grpc.max_send_message_length': 1 * 1024 * 1024 * 1024, // 1 GB
+        'grpc.max_receive_message_length': 1 * 1024 * 1024 * 1024 // 1 GB
     }
 );
 
