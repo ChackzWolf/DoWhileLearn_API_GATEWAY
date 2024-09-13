@@ -15,7 +15,7 @@ if (!JWT_SECRET || !REFRESH_TOKEN_SECRET) {
 
 const createToken = (
   user: IUser, role:string
-): { accessToken: string; refreshToken: string } => {
+) : { accessToken: string; refreshToken: string } => {
   const accessToken = jwt.sign(
     {
      // id: user._id,

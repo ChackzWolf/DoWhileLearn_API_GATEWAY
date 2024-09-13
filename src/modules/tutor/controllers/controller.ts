@@ -62,7 +62,12 @@ export default class TutorController {
                 res.status(500).send(err.message);  
             }else{
                 if(success){
-                    const {refreshToken, accessToken} = createToken(tutorData, "USER")
+                    const {refreshToken, accessToken} = createToken(tutorData, "TUTOR")
+                    res.cookie('refreshToken', refreshToken, { 
+                        httpOnly: true, 
+                        secure: true, // Make sure to use 'secure' in production with HTTPS
+                        sameSite: 'strict' 
+                    });
                     res.status(StatusCode.Created).send({message, success, accessToken, refreshToken});
                 }
             }

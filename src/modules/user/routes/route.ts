@@ -9,8 +9,7 @@ const controller = new UserController();
 userRoute.post("/register", controller.register);
 userRoute.post('/verifyOTP', controller.verifyOtp);
 userRoute.post('/resendOTP', controller.resendOtp);
-userRoute.post("/login", controller.userLogin );    
-userRoute.post("/refresh-token", controller.refreshToken)
+userRoute.post("/login", controller.userLogin );
 
 
 

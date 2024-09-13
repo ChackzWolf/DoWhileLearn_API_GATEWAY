@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { ServiceError } from "@grpc/grpc-js";
+import courseRoute from "../routes/route";
 
 // Configure multer for file handling
 const videoStorage = multer.memoryStorage(); // Store file in memory for video
@@ -97,6 +98,33 @@ export default class CourseController {
             res.status(200).json({s3Url, success, message});
           });
         });
-      };
+      }; 
+
+
+      SubmitCourse(req:Request, res:Response, next: NextFunction) {
+        CourseClient.SubmitCourse(req.body, (err: ServiceError | null, result: any) => {
+          if (err) {
+            console.error('gRPC error:', err);
+            return res.status(500).send('Error from gRPC service: ' + err.message);
+          }
+          console.log(result); 
+          res.status(200).json(result);
+        })
+      } 
+
+      FetchCourse(req:Request, res:Response, next: NextFunction) {
+        console.log('trig')
+        CourseClient.FetchCourse(req.body, (err: ServiceError | null, result: any) => {
+          if(err){
+            console.error("gRPC error:", err);
+            return res.status(500).send("Error from gRPC service:" + err.message);
+          }
+          
+          console.log("result: ", result);
+
+
+          res.status(200).json(result);
+        })
+      }
 }
-   
+      

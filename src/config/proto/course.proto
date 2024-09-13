@@ -3,7 +3,14 @@ syntax = "proto3";
 service CourseService {
   rpc UploadVideo(VideoRequest) returns (VideoResponse);
   rpc UploadImage(ImageRequest) returns (ImageResponse);
+  rpc SubmitCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
+  rpc FetchCourse(emptyRequest) returns (ResponseFetchCourseList);
 }
+
+message ResponseFetchCourseList {
+  repeated ResponseFetchCourse courses = 1;
+}
+message emptyRequest {}
 
 message VideoRequest {
   bytes videoBinary = 1; // Video data as binary
@@ -24,4 +31,56 @@ message ImageResponse {
   string message = 1;
   string s3Url = 2;
   bool success = 3;
+}
+
+
+message ResponseFetchCourse {
+  string courseCategory = 1;
+  string courseDescription = 2;
+  string courseLevel = 3;
+  string coursePrice = 4;
+  string courseTitle = 5;
+  string demoURL = 6;
+  string discountPrice = 7;
+  string thumbnail = 8;
+  BenefitsPrerequisites benefits_prerequisites = 9;
+  repeated Module Modules = 10;
+}
+
+
+
+
+message SubmitCourseRequest {
+  string courseCategory = 1;
+  string courseDescription = 2;
+  string courseLevel = 3;
+  string coursePrice = 4;
+  string courseTitle = 5;
+  string demoURL = 6;
+  string discountPrice = 7;
+  string thumbnail = 8;
+  BenefitsPrerequisites benefits_prerequisites = 9;
+  repeated Module Modules = 10;
+}
+
+message BenefitsPrerequisites {
+  repeated string benefits = 1;
+  repeated string prerequisites = 2;
+}
+
+message Module {
+  string name = 1;
+  string description = 2;
+  repeated Lesson lessons = 3;
+}
+
+message Lesson {
+  string title = 1;
+  string video = 2;
+  string description = 3;
+} 
+
+message SubmitCourseResponse {
+  string message = 1;
+  bool success = 2;
 }

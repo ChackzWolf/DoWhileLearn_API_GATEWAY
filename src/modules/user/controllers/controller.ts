@@ -11,25 +11,16 @@ export default class UserController {
     register(req: Request, res: Response, next: NextFunction) {
         UserClient.Register(req.body, (err: ServiceError | null, result: any) => {
             console.log('triggered api')
-            const {success, message, userData} = result;
+       
+            console.log(result)
             if (err) {
                 console.error(err);
                 res.status(500).send(err.message);
             } else {
-                if(success){
-                    const {refreshToken, accessToken} = createToken(result.useData,'USER');
-                    const data = {
-                        success,
-                        message,
-                        accessToken,
-                        refreshToken
-                    }
-                    console.log(data);   
-                }
                 res.status(200).json(result);
             }
-        }); 
-    }
+        });  
+    } 
 
     verifyOtp(req: Request, res: Response, next: NextFunction): void {
         UserClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
@@ -73,10 +64,9 @@ export default class UserController {
                         secure: true, // Make sure to use 'secure' in production with HTTPS
                         sameSite: 'strict' 
                     });
-                    res.status(StatusCode.Created).send({message, success, accessToken});
+                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken});
                 }
             }
-            
         })
     }
  

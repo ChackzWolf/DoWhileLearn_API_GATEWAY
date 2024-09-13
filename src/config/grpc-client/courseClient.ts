@@ -15,7 +15,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/cou
 }); 
 
 const CourseService = grpc.loadPackageDefinition(packageDefinition).CourseService as grpc.ServiceClientConstructor;
-
+ 
 const CourseClient   = new CourseService(
     `0.0.0.0:${process.env.COURSE_SERVICE_PORT}`,grpc.credentials.createInsecure(),
     {

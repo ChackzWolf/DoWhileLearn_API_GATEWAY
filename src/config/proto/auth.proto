@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+service AuthService {
+    rpc IsAuthenticated (IsAuthenticatedRequest) returns (IsAuthenticatedResponse);
+    rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
+}
+
+message IsAuthenticatedRequest {
+    string token = 1;
+    string refreshToken = 2;
+}
+
+message IsAuthenticatedResponse {
+    string message = 1;
+    bool success = 2;
+    int32 status = 3;
+}
+
+message RefreshTokenRequest {
+    string accessToken = 1;
+    string rol = 2;
+}
+
+message RefreshTokenResponse {
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+}
