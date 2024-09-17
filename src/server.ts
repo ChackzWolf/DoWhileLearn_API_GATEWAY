@@ -7,6 +7,7 @@ import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import userRoute from "./modules/user/routes/route";
 import tutorRoute from "./modules/tutor/routes/route";
+import adminRoute from "./modules/admin/routes/route";
 import courseRoute from "./modules/course/routes/route"
 import authRoute from "./modules/auth/routes/route";
 dotenv.config();
@@ -56,8 +57,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", userRoute);
 app.use("/tutor",tutorRoute);
+app.use("/admin",adminRoute)
 app.use("/course",courseRoute);
 app.use("/auth",authRoute)
+
 
 
 app.listen(port, () => { 

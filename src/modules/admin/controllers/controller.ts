@@ -1,29 +1,16 @@
-import { Request, Response, NextFunction } from "express";
-import { TutorClient } from "../../../config/grpc-client/tutorClient";
+import { Request, Response, NextFunction, response } from "express";
+import { AdminClient } from "../../../config/grpc-client/adminClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import createToken from "../../../utils/tokenActivation";
+import { UserClient } from "../../../config/grpc-client/userClient";
 
 
 
 
-export default class TutorController {  
-
-    register(req: Request, res: Response, next: NextFunction) {
-        TutorClient.Register(req.body, (err: ServiceError | null, result: any) => {
-            console.log('triggered api tutor')
-            if (err) {
-                console.error(err);
-                res.status(500).send(err.message);
-            } else {
-                console.log(result) 
-                res.status(200).json(result);
-            }
-        }); 
-    }
-
+export default class AdminController {  
     verifyOtp(req: Request, res: Response, next: NextFunction): void {
-        TutorClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
+        AdminClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
             console.log(result,'result') 
 
             const {success, message, tutorData} = result
@@ -43,7 +30,7 @@ export default class TutorController {
     }
  
     resendOtp(req:Request, res:Response, next:NextFunction){
-        TutorClient.ResendOTP(req.body, (err: ServiceError | null, result: any) =>{
+        AdminClient.ResendOTP(req.body, (err: ServiceError | null, result: any) =>{
             console.log('triggered resend api')
             if(err){
                 console.log(err); 
@@ -54,23 +41,32 @@ export default class TutorController {
         })  
     }
 
-    tutorLogin (req:Request, res:Response, next:NextFunction){
-        TutorClient.Login(req.body, (err: ServiceError | null, result: any) =>{
+     Login (req:Request, res:Response, next:NextFunction){
+        console.log('triggereed')
+        AdminClient.Login(req.body, (err: ServiceError | null, result: any) =>{
             console.log(result , 'result ')
-            const {message, success, tutorData} = result;
+            const {message, success, adminData, refreshToken, accessToken } = result;
             if(err){
                 res.status(500).send(err.message);  
             }else{
+
                 if(success){
-                    const {refreshToken, accessToken} = createToken(tutorData, "TUTOR")
                     res.cookie('refreshToken', refreshToken, { 
                         httpOnly: true, 
                         secure: true, // Make sure to use 'secure' in production with HTTPS
                         sameSite: 'strict' 
                     });
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,_id:tutorData._id});
+                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,_id:adminData._id});
                 }
             }
+            
+        })
+    }
+
+    FetchStudentData (req:Request, res:Response, next:NextFunction){
+        UserClient.FetchStudentData(req.body, (err:ServiceError | null , result: any)=> {
+            console.log(result, 'result')
+            const { message, success, studentsData} = result;
             
         })
     }

@@ -23,8 +23,9 @@ export default class AuthController {
     }
 
     refreshToken(req: Request, res: Response, _next: NextFunction): void {
+        console.log("triggered refresh ",req)
         AuthClient.RefreshToken(req.body, (err: ServiceError | null, result: any) => {
-            console.log(result,'result') 
+            console.log(result,'resultdddd') 
 
             const {success, message, tutorData} = result
             if (err) {  
@@ -34,7 +35,7 @@ export default class AuthController {
       
             if (success) {   
                 const {refreshToken, accessToken} = createToken(tutorData,"TUTOR"); 
-    
+                console.log("trig")
                 res.status(200).json({ success: true, message: "OTP verified successfully." , refreshToken, accessToken});
             } else {
                 res.status(400).json({ success: false, message: "Invalid OTP response." });

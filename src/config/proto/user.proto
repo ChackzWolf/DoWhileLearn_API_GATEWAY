@@ -5,6 +5,14 @@ service UserService {
     rpc VerifyOTP (OTPRequest) returns (OTPResponse);
     rpc ResendOTP (OTPRequest) returns (OTPResponse);
     rpc TutorLogin (LoginRequest) returns (LoginResponse);
+    rpc FetchStudentData (EmptyRequest) returns (ResponseAllStudents);
+}
+
+message EmptyRequest {}
+
+message ResponseAllStudents {
+    repeated useData students = 1;
+    bool success = 2;
 }
 
 message RegisterRequest {

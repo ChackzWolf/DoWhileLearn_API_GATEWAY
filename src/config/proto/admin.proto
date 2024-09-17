@@ -1,26 +1,11 @@
 syntax = "proto3";
 
-service TutorService {
-    rpc Register(RegisterRequest) returns (RegisterResponse);
+service AdminService {
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc VerifyOTP(OTPRequest) returns (OTPResponse);
     rpc ResendOTP(OTPRequest) returns (OTPResponse);
 }
 
-message RegisterRequest {
-    string firstName = 1;
-    string lastName = 2;
-    string email = 3;
-    string password = 4;
-}
-
-message RegisterResponse {
-    bool success = 1;
-    string tempId = 2;
-    string msg = 3;
-    string email = 4;
-    int32 status = 5;
-}
 
 message OTPRequest {
     string email = 1;
@@ -30,7 +15,7 @@ message OTPRequest {
 
 message OTPResponse {
     bool success = 1;
-    tutorData tutorData = 2;
+    AdminData adminData = 2;
     string message = 3;
     int32 status = 4;
     string accessToken=5;
@@ -44,14 +29,14 @@ message LoginRequest {
 
 message LoginResponse {
     bool success = 1;
-    tutorData tutorData = 2;
+    AdminData adminData = 2;
     string message = 3;
     int32 status = 4;
     string accessToken=5;
     string refreshToken = 6;
 }
 
-message tutorData{
+message AdminData{
     string firstName = 1;
     string lastName = 2;
     string email = 3;
