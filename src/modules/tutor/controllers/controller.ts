@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { TutorClient } from "../../../config/grpc-client/tutorClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
-import createToken from "../../../utils/tokenActivation";
+import { CourseClient } from "../../../config/grpc-client/courseClient";
+import createToken from "../../../utils/tokenActivation"
 
 
 
@@ -35,7 +36,7 @@ export default class TutorController {
             if (success) {   
                 const {refreshToken, accessToken} = createToken(tutorData,"TUTOR"); 
     
-                res.status(200).json({ success: true, message: "OTP verified successfully." , refreshToken, accessToken});
+                res.status(200).json({ success: true, message: "OTP verified successfully." , refreshToken, accessToken, id:tutorData._id});
             } else {
                 res.status(400).json({ success: false, message: "Invalid OTP response." });
             }
@@ -74,4 +75,20 @@ export default class TutorController {
             
         })
     }
+
+    FetchTutorCourse(req:Request, res:Response, next: NextFunction) {
+        console.log('trig')
+        const tutorId = req.query.tutorId as string;
+        CourseClient.FetchTutorCourse({tutorId}, (err: ServiceError | null, result: any) => {
+          if(err){
+            console.error("gRPC error:", err);
+            return res.status(500).send("Error from gRPC service:" + err.message);
+          }
+          
+          console.log("result: ", result);
+ 
+
+          res.status(StatusCode.OK).json(result);
+        })
+      }
 }  

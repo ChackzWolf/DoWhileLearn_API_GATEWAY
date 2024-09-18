@@ -12,6 +12,9 @@ tutorRoute.post('/resendOTP', controller.resendOtp);
 tutorRoute.post("/login", controller.tutorLogin );    
 
 
+tutorRoute.get("/fetchTutroCourse",controller.FetchTutorCourse)
+
+
 
 
 export default tutorRoute;  

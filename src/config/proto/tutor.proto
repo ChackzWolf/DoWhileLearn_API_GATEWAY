@@ -5,6 +5,25 @@ service TutorService {
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc VerifyOTP(OTPRequest) returns (OTPResponse);
     rpc ResendOTP(OTPRequest) returns (OTPResponse);
+    rpc FetchTutorData(EmptyRequest) returns (ResponseAllTutors);
+    rpc ToggleBlock (ToggleBlockRequest) returns (ToggleBlockResponse);
+}
+
+message EmptyRequest {}
+
+message ToggleBlockRequest {
+    string tutorId = 1;
+}
+
+message ToggleBlockResponse {
+    string message = 1;
+    bool success = 2;
+}
+
+
+message ResponseAllTutors {
+    repeated tutorData tutors = 1;
+    bool success = 2;
 }
 
 message RegisterRequest {
@@ -57,4 +76,5 @@ message tutorData{
     string email = 3;
     string password = 4;
     string _id = 5;
+    bool isblocked = 6;
 }

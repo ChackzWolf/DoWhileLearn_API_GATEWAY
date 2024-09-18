@@ -8,9 +8,14 @@ const controller = new AdminController();
 
 adminRoute.post('/verifyOTP', controller.verifyOtp);
 adminRoute.post('/resendOTP', controller.resendOtp);
-adminRoute.post("/login", controller.Login );    
-adminRoute.post("/fetchStudentData", controller.FetchStudentData)
- 
+adminRoute.post("/login", controller.Login );
+adminRoute.post("/toggleBlockStudent", controller.ToggleBlockStudent);  
+adminRoute.post("/toggleBlockTutor", controller.ToggleBlockTutor); 
+
+
+adminRoute.get("/fetchStudentData", controller.FetchStudentData);
+adminRoute.get("/fetchTutorData", controller.FetchTutorData);
+
 
 
 

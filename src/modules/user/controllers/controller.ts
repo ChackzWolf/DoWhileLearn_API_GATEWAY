@@ -17,21 +17,20 @@ export default class UserController {
                 console.error(err);
                 res.status(500).send(err.message);
             } else {
-                res.status(200).json(result);
+                res.status(200).json(result); 
             }
         });  
-    } 
+    }  
 
     verifyOtp(req: Request, res: Response, next: NextFunction): void {
         UserClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
-            const {message, success, useData} = result;
+            const {message, success, accessToken, refreshToken} = result;
             if (err) {
                 console.error("Error verifying OTP:", err);
                 return res.status(500).send(err.message);  // Return early if there's an error
             }
     
             if (success) {
-                const {accessToken, refreshToken} = createToken(useData, 'USER');
                 res.status(200).json({ success: true, message: "OTP verified successfully.", accessToken, refreshToken });
             } else {
                 res.status(400).json({ success: false, message});
@@ -48,7 +47,7 @@ export default class UserController {
             }else{
                 res.status(200).json(result);  
             }
-        })
+        }) 
     }
 
     userLogin (req:Request, res:Response, next:NextFunction){

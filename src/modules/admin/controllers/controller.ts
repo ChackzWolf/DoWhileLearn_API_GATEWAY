@@ -4,6 +4,7 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import createToken from "../../../utils/tokenActivation";
 import { UserClient } from "../../../config/grpc-client/userClient";
+import { TutorClient } from "../../../config/grpc-client/tutorClient";
 
 
 
@@ -42,18 +43,16 @@ export default class AdminController {
     }
 
      Login (req:Request, res:Response, next:NextFunction){
-        console.log('triggereed')
         AdminClient.Login(req.body, (err: ServiceError | null, result: any) =>{
             console.log(result , 'result ')
             const {message, success, adminData, refreshToken, accessToken } = result;
             if(err){
                 res.status(500).send(err.message);  
             }else{
-
                 if(success){
                     res.cookie('refreshToken', refreshToken, { 
-                        httpOnly: true, 
-                        secure: true, // Make sure to use 'secure' in production with HTTPS
+                        httpOnly: true , 
+                        secure: true,
                         sameSite: 'strict' 
                     });
                     res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,_id:adminData._id});
@@ -63,11 +62,30 @@ export default class AdminController {
         })
     }
 
-    FetchStudentData (req:Request, res:Response, next:NextFunction){
-        UserClient.FetchStudentData(req.body, (err:ServiceError | null , result: any)=> {
-            console.log(result, 'result')
-            const { message, success, studentsData} = result;
-            
+    ToggleBlockStudent(req:Request, res: Response, nest: NextFunction){
+        UserClient.ToggleBlock(req.body, (err:ServiceError | null, result:any)=> { 
+
+            res.status(StatusCode.Accepted).send(result);
         })
     }
-}  
+
+    ToggleBlockTutor(req:Request, res: Response, nest: NextFunction){
+        TutorClient.ToggleBlock(req.body, (err:ServiceError | null, result:any)=> {
+            res.status(StatusCode.Accepted).send(result);
+        })
+    }
+
+    FetchStudentData (req:Request, res:Response, next:NextFunction){
+        console.log('triggerd fetsh students')
+        UserClient.FetchStudentData(req.body, (err:ServiceError | null , result: any)=> {
+            res.status(StatusCode.Created).send(result);
+        })
+    }
+
+    FetchTutorData(req:Request, res: Response, next: NextFunction){
+        console.log('trig fetch tutor')
+        TutorClient.FetchTutorData(req.body, (err:ServiceError | null, result:any) => {
+            res.status(StatusCode.Accepted).send(result)
+        })
+    }
+}   

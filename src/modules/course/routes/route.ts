@@ -9,9 +9,12 @@ const authController = new AuthController()
 const isAuth = authController.isAuthenticated
 const controller = new CourseController();
 
-courseRoute.post("/upload",isAuth, controller.UploadVideo);
-courseRoute.post("/imageUpload",isAuth, controller.UploadImage);
-courseRoute.post("/submitCourse",isAuth, controller.SubmitCourse);
-courseRoute.get("/fetchCourse", isAuth ,controller.FetchCourse);
+courseRoute.post("/upload", controller.UploadVideo);
+courseRoute.post("/imageUpload", controller.UploadImage);
+courseRoute.post("/submitCourse", controller.SubmitCourse);
+
+
+courseRoute.get("/fetchCourse" ,controller.FetchCourse);
+courseRoute.get("/fetchCourseDetails", controller.FetchCourseDetails)
 
 export default courseRoute;

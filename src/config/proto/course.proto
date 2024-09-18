@@ -5,6 +5,14 @@ service CourseService {
   rpc UploadImage(ImageRequest) returns (ImageResponse);
   rpc SubmitCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
   rpc FetchCourse(emptyRequest) returns (ResponseFetchCourseList);
+  rpc FetchTutorCourse(RequestFetchTutorCourse) returns (ResponseFetchCourseList);
+  rpc FetchCourseDetails(RequestFetchCourseDetails) returns (ResponseFetchCourse);
+}
+message RequestFetchCourseDetails {
+  string id = 1;
+}
+message RequestFetchTutorCourse {
+  string tutorId = 1;
 }
 
 message ResponseFetchCourseList {
@@ -45,22 +53,24 @@ message ResponseFetchCourse {
   string thumbnail = 8;
   BenefitsPrerequisites benefits_prerequisites = 9;
   repeated Module Modules = 10;
+   string _id = 11;
 }
 
 
 
 
 message SubmitCourseRequest {
-  string courseCategory = 1;
-  string courseDescription = 2;
-  string courseLevel = 3;
-  string coursePrice = 4;
-  string courseTitle = 5;
-  string demoURL = 6;
-  string discountPrice = 7;
-  string thumbnail = 8;
-  BenefitsPrerequisites benefits_prerequisites = 9;
-  repeated Module Modules = 10;
+  string tutorId = 1;
+  string courseCategory = 2;
+  string courseDescription = 3;
+  string courseLevel = 4;
+  string coursePrice = 5;
+  string courseTitle = 6;
+  string demoURL = 7;
+  string discountPrice = 8;
+  string thumbnail = 9;
+  BenefitsPrerequisites benefits_prerequisites = 10;
+  repeated Module Modules = 11;
 }
 
 message BenefitsPrerequisites {
