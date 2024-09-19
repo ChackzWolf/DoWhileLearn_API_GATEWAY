@@ -73,4 +73,3 @@ export enum StatusCode {
   }
   
 
-  console.log('hello world')
