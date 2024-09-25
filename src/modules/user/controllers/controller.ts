@@ -52,20 +52,20 @@ export default class UserController {
 
     userLogin (req:Request, res:Response, next:NextFunction){
         UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) =>{
-            const {message, success, useData} = result;
+            const {message, success, accessToken,refreshToken ,userId} = result;
             if(err){
                 res.status(500).send(err.message);
             }else{
                 if(success){
-                    const {refreshToken, accessToken} = createToken(useData, "USER")
-                    res.cookie('refreshToken', refreshToken, { 
-                        httpOnly: true, 
-                        secure: true, // Make sure to use 'secure' in production with HTTPS
-                        sameSite: 'strict' 
-                    });
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken});
+                    // res.cookie('refreshToken', refreshToken, { 
+                    //     httpOnly: true, 
+                    //     secure: true, // Make sure to use 'secure' in production with HTTPS
+                    //     sameSite: 'strict' 
+                    // });
+                    console.log(result)
+                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken , userId});
                 }
-            }
+            } 
         })
     }
  
@@ -95,5 +95,16 @@ export default class UserController {
             
             res.json({ accessToken });
         });
-    }    
+    }
+
+    addToCart(req: Request, res: Response, next:NextFunction){
+        UserClient.AddToCart(req.body, (err: ServiceError | null, result: any) =>{ 
+            
+            console.log(result, 'result');
+            const {success, message, inCart} = result;
+            if(success)(
+                res.status(StatusCode.Created).send({message,success, inCart})
+            )  
+        });
+    }
 } 

@@ -12,7 +12,7 @@ const controller = new CourseController();
 courseRoute.post("/upload", controller.UploadVideo);
 courseRoute.post("/imageUpload", controller.UploadImage);
 courseRoute.post("/submitCourse", controller.SubmitCourse);
-
+courseRoute.post("/editCourse", controller.EditCourseDetails)
 
 courseRoute.get("/fetchCourse" ,controller.FetchCourse);
 courseRoute.get("/fetchCourseDetails", controller.FetchCourseDetails)

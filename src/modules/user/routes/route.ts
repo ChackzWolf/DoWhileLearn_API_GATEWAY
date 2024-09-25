@@ -10,8 +10,9 @@ userRoute.post("/register", controller.register);
 userRoute.post('/verifyOTP', controller.verifyOtp);
 userRoute.post('/resendOTP', controller.resendOtp);
 userRoute.post("/login", controller.userLogin );
+userRoute.post("/addToCart",controller.addToCart);
 
 
 
 
-export default userRoute;  
+export default userRoute;   

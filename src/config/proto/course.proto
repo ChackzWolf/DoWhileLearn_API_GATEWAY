@@ -4,6 +4,7 @@ service CourseService {
   rpc UploadVideo(VideoRequest) returns (VideoResponse);
   rpc UploadImage(ImageRequest) returns (ImageResponse);
   rpc SubmitCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
+  rpc EditCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
   rpc FetchCourse(emptyRequest) returns (ResponseFetchCourseList);
   rpc FetchTutorCourse(RequestFetchTutorCourse) returns (ResponseFetchCourseList);
   rpc FetchCourseDetails(RequestFetchCourseDetails) returns (ResponseFetchCourse);
@@ -71,6 +72,7 @@ message SubmitCourseRequest {
   string thumbnail = 9;
   BenefitsPrerequisites benefits_prerequisites = 10;
   repeated Module Modules = 11;
+  string courseId = 12;
 }
 
 message BenefitsPrerequisites {

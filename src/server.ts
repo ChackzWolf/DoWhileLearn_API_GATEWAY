@@ -66,3 +66,4 @@ app.use("/auth",authRoute)
 app.listen(port, () => { 
   console.log(`API_GATEWAY is running on ${port}`);
 });
+ 

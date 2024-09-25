@@ -56,7 +56,7 @@ export enum StatusCode {
     PreconditionRequired = 428,
     TooManyRequests = 429,
     RequestHeaderFieldsTooLarge = 431,
-    UnavailableForLegalReasons = 451,
+    UnavailableForLegalReasons = 451, 
   
     // Server error responses (500–599)
     InternalServerError = 500,
@@ -67,9 +67,9 @@ export enum StatusCode {
     HTTPVersionNotSupported = 505,
     VariantAlsoNegotiates = 506,
     InsufficientStorage = 507,
-    LoopDetected = 508,
+    LoopDetected = 508, 
     NotExtended = 510,
     NetworkAuthenticationRequired = 511,
   }
-  
+   
 

@@ -1,17 +1,33 @@
 syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
-
 service UserService {
     rpc Register (RegisterRequest) returns (RegisterResponse) {};
     rpc VerifyOTP (OTPRequest) returns (OTPResponse);
     rpc ResendOTP (OTPRequest) returns (OTPResponse);
-    rpc TutorLogin (LoginRequest) returns (LoginResponse);
+    rpc UserLogin (LoginRequest) returns (LoginResponse);
     rpc FetchStudentData (EmptyRequest) returns (ResponseAllStudents);
     rpc ToggleBlock (ToggleBlockRequest) returns (ToggleBlockResponse);
+    rpc AddToCart (AddToCartRequest) returns (AddToCartResponse);
+    rpc IsInCart (AddToCartRequest) returns (IsInCartResponse);
 }
 
 message EmptyRequest {}
+
+message IsInCartResponse {
+    bool message = 1;
+    bool inCart = 2;
+}
+message AddToCartRequest {
+    string userId = 1;
+    string courseId = 2;
+}
+
+message AddToCartResponse {
+    string message = 1;
+    bool success = 2;
+    bool inCart = 3;
+}
 
 message ToggleBlockRequest {
     string userId = 1;
@@ -27,7 +43,7 @@ message ResponseAllStudents {
     bool success = 2;
 }
 
-message RegisterRequest {
+message RegisterRequest{
     string firstName=1;
     string lastName=2;
     string email=3;
@@ -55,6 +71,7 @@ message UserData {
     google.protobuf.Timestamp createdAt = 9;
     google.protobuf.Timestamp updatedAt =10;
     string _id = 11;
+
 }
 
 
@@ -71,9 +88,16 @@ message OTPResponse {
     string userId = 4;
     string accessToken = 5;
     string refreshToken = 6;
+    string _id = 7;
 }
 
-
+message useData {
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string password = 4;
+    string _id = 5;
+}
 
 message LoginRequest {
     string email = 1;
@@ -82,8 +106,9 @@ message LoginRequest {
 
 message LoginResponse {
     bool success = 1;
-    string token = 2;
+    string accessToken = 2;
     string refreshToken = 3;
-    string msg = 4;
+    string message = 4;
     int32 status = 5;
+    string userId = 6;
 }

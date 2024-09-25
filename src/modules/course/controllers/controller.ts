@@ -4,6 +4,7 @@ import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { ServiceError } from "@grpc/grpc-js";
 import courseRoute from "../routes/route";
 import { StatusCode } from "../../../interface/enums";
+import { UserClient } from "../../../config/grpc-client/userClient";
 
 
 // Configure multer for file handling
@@ -115,6 +116,18 @@ export default class CourseController {
         })
       } 
 
+      EditCourseDetails(req:Request, res:Response, next:NextFunction){
+        console.log('triggggggg', req.body)
+        CourseClient.EditCourse(req.body, (err:ServiceError | null, result: any) => {
+          if (err) {
+            console.error('gRPC error:', err);
+            return res.status(500).send('Error from gRPC service: ' + err.message);
+          }
+          console.log(result); 
+          res.status(200).json(result);
+        })
+      }
+
       FetchCourse(req:Request, res:Response, next: NextFunction) {
         console.log('trig')
         CourseClient.FetchCourse(req.body, (err: ServiceError | null, result: any) => {
@@ -122,10 +135,7 @@ export default class CourseController {
             console.error("gRPC error:", err);
             return res.status(500).send("Error from gRPC service:" + err.message);
           }
-          
-          console.log("result: ", result); 
  
-
           res.status(200).json(result);
         })
       }
@@ -133,15 +143,31 @@ export default class CourseController {
       FetchCourseDetails(req:Request, res:Response, next: NextFunction){
         console.log('trig')
         const id = req.query.id as string; 
+        const userId = req.query.userId as string;
 
         CourseClient.FetchCourseDetails({id}, (err:ServiceError | null,  result: any) => {
           if(err){
             console.log(err)
             return res.status(500).send("Error from grpc servcie:"+ err.message);
           }
-
-          console.log(result,"result")
-          res.status(StatusCode.OK).json(result);
+          const courseData = result;
+          console.log(result)
+          if(userId){
+            
+            const data = {
+              userId,
+              courseId:id
+            }
+            UserClient.IsInCart(data, (err: ServiceError | null, result: any) => {
+              console.log(result)
+              res.status(StatusCode.OK).json({courseData,inCart:result.inCart});
+            })
+          }else{
+            res.status(StatusCode.OK).json({courseData,inCart:false});
+          }
+          
         })
       }
+
+  
 }

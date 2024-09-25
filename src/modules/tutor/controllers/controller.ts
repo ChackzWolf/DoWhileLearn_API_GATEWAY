@@ -84,9 +84,6 @@ export default class TutorController {
             console.error("gRPC error:", err);
             return res.status(500).send("Error from gRPC service:" + err.message);
           }
-          
-          console.log("result: ", result);
- 
 
           res.status(StatusCode.OK).json(result);
         })
