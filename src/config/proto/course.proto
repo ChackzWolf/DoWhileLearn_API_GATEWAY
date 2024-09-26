@@ -55,6 +55,7 @@ message ResponseFetchCourse {
   BenefitsPrerequisites benefits_prerequisites = 9;
   repeated Module Modules = 10;
    string _id = 11;
+   string tutorId = 12;
 }
 
 

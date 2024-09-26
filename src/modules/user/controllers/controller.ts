@@ -3,7 +3,7 @@ import { UserClient } from "../../../config/grpc-client/userClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import jwt, {VerifyErrors} from 'jsonwebtoken'
-import createToken from "../../../utils/tokenActivation";
+import { PaymentClient } from "../../../config/grpc-client/paymentClient";
 
 
 export default class UserController {  
@@ -90,9 +90,9 @@ export default class UserController {
             const accessToken = jwt.sign(
                 { id: decoded.id, email: decoded.email },
                 process.env.JWT_SECRET as string,
-                { expiresIn: '15m' }
-            );
-            
+                { expiresIn: '15m' } 
+            ); 
+             
             res.json({ accessToken });
         });
     }
@@ -106,5 +106,11 @@ export default class UserController {
                 res.status(StatusCode.Created).send({message,success, inCart})
             )  
         });
+    }
+    makePayment(req:Request, res:Response, next:NextFunction) {
+        PaymentClient.PurchasePayment(req.body, (err: ServiceError | null, result: any) => {
+            console.log(result, 'result');
+            
+        })
     }
 } 
