@@ -18,7 +18,5 @@ message PaymentRequest {
 }
 
 message PaymentResponse {
-    string session_id = 1;
-    PaymentRequest data = 2;
+    string session_id = 1;          // Change this to sessionId for consistency
 }
-

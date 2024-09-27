@@ -105,12 +105,14 @@ export default class UserController {
             if(success)(
                 res.status(StatusCode.Created).send({message,success, inCart})
             )  
-        });
+        }); 
     }
     makePayment(req:Request, res:Response, next:NextFunction) {
         PaymentClient.PurchasePayment(req.body, (err: ServiceError | null, result: any) => {
             console.log(result, 'result');
-            
+            if(result.session_id) {
+                res.status(StatusCode.Created).send({session_id :result.session_id});
+            }
         })
     }
 } 
