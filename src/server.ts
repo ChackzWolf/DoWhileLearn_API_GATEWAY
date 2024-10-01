@@ -10,6 +10,7 @@ import tutorRoute from "./modules/tutor/routes/route";
 import adminRoute from "./modules/admin/routes/route";
 import courseRoute from "./modules/course/routes/route"
 import authRoute from "./modules/auth/routes/route";
+import orderRoute from "./modules/order/routes/route";
 dotenv.config();
 const app: Express = express();
 
@@ -60,6 +61,7 @@ app.use("/tutor",tutorRoute);
 app.use("/admin",adminRoute)
 app.use("/course",courseRoute);
 app.use("/auth",authRoute)
+app.use("/order",orderRoute)
 
 
 

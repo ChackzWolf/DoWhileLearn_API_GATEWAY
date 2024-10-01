@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+}
+
+message CreateOrderRequest {
+    string courseId = 1;
+    string userId = 2;
+    string tutorId = 3;
+    string category = 4;
+    string thumbnail = 5;
+    string title = 6;
+    string price = 7;
+    string level = 8;
+    string totalLessons = 9;
+    string discourtPrice = 10;
+}
+
+message CreateOrderResponse {
+    string session_id = 1;          // Change this to sessionId for consistency
+}

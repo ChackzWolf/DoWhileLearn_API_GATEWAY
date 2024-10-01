@@ -23,4 +23,6 @@ userRoute.post("/login", controller.userLogin);
 userRoute.post("/addToCart", controller.addToCart);
 userRoute.post("/makePayment", controller.makePayment);
 
+
+
 export default userRoute;

@@ -50,18 +50,13 @@ export default class UserController {
         }) 
     }
 
-    userLogin (req:Request, res:Response, next:NextFunction){
+    userLogin (req:Request, res:Response, next:NextFunction){ 
         UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) =>{
             const {message, success, accessToken,refreshToken ,userId} = result;
             if(err){
                 res.status(500).send(err.message);
             }else{
                 if(success){
-                    // res.cookie('refreshToken', refreshToken, { 
-                    //     httpOnly: true, 
-                    //     secure: true, // Make sure to use 'secure' in production with HTTPS
-                    //     sameSite: 'strict' 
-                    // });
                     console.log(result)
                     res.status(StatusCode.Created).send({message, success, accessToken, refreshToken , userId});
                 }
@@ -115,4 +110,4 @@ export default class UserController {
             }
         })
     }
-} 
+}  
