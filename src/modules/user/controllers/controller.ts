@@ -52,11 +52,12 @@ export default class UserController {
 
     userLogin (req:Request, res:Response, next:NextFunction){ 
         UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) =>{
-            const {message, success, accessToken,refreshToken ,userId} = result;
+       
             if(err){
                 res.status(500).send(err.message);
             }else{
-                if(success){
+                if(result.success){
+                    const {message, success, accessToken,refreshToken ,userId} = result;
                     console.log(result)
                     res.status(StatusCode.Created).send({message, success, accessToken, refreshToken , userId});
                 }

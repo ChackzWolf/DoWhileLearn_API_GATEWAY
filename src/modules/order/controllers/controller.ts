@@ -18,7 +18,7 @@ export default class OrderController {
                 console.error(err);
                 res.status(500).send(err.message);
             } else {
-                console.log(result) 
+                console.log(result, 'rsult from paymentClient.succespayment') 
                 const orderData = result;
                 OrderClient.createOrder( orderData, (err: ServiceError | null, result: any) => {
                     console.log('triggered api create order')
