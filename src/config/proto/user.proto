@@ -10,6 +10,24 @@ service UserService {
     rpc ToggleBlock (ToggleBlockRequest) returns (ToggleBlockResponse);
     rpc AddToCart (AddToCartRequest) returns (AddToCartResponse);
     rpc IsInCart (AddToCartRequest) returns (IsInCartResponse);
+    rpc AddPurchasedCourses(addPurchasedCoursesRequest) returns (addPurchasedCoursesResponse);
+    rpc CourseStatus(AddToCartRequest) returns(CourseStatusResponse);
+}
+
+message CourseStatusResponse {
+    bool inPurchase = 1;
+    bool inCart = 2;
+    bool inWishlist = 3;
+}
+
+message addPurchasedCoursesRequest {
+    string courseId = 1;
+    string userId = 2;
+}
+message addPurchasedCoursesResponse {
+    bool success = 1;
+    string message = 2;
+    bool status = 3;
 }
 
 message EmptyRequest {}

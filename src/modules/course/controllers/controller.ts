@@ -153,14 +153,14 @@ export default class CourseController {
           const courseData = result;
           console.log(result)
           if(userId){
-            
             const data = {
               userId,
               courseId:id
             }
-            UserClient.IsInCart(data, (err: ServiceError | null, result: any) => {
-              console.log(result)
-              res.status(StatusCode.OK).json({courseData,inCart:result.inCart});
+
+            UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
+              console.log(result, 'course status')
+              res.status(StatusCode.OK).json({courseData,courseStatus:result});
             })
           }else{
             res.status(StatusCode.OK).json({courseData,inCart:false});
@@ -168,6 +168,4 @@ export default class CourseController {
           
         })
       }
-
-  
 }

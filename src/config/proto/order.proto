@@ -14,9 +14,23 @@ message CreateOrderRequest {
     string price = 7;
     string level = 8;
     string totalLessons = 9;
-    string discourtPrice = 10;
+    string transactionId = 10;
 }
 
 message CreateOrderResponse {
-    string session_id = 1;          // Change this to sessionId for consistency
+    createdOrder order = 1;          // Change this to sessionId for consistency
+    bool success = 2;
+    string message =3;
+}
+
+message createdOrder {
+    string userId = 1;
+    string courseId = 2;
+    string tutorId = 3;
+    string thumbnail = 4;
+    string title = 5;
+    string price = 6;
+    string transactionId = 7;
+    bool paymentStatus =8;
+    string _id = 9;
 }
