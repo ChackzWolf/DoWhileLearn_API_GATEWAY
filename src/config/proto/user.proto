@@ -12,6 +12,16 @@ service UserService {
     rpc IsInCart (AddToCartRequest) returns (IsInCartResponse);
     rpc AddPurchasedCourses(addPurchasedCoursesRequest) returns (addPurchasedCoursesResponse);
     rpc CourseStatus(AddToCartRequest) returns(CourseStatusResponse);
+    rpc GetCartItemsIds(GetCartItemsIdsRequest) returns (GetCartItemsIdsResponse);
+}
+
+message GetCartItemsIdsRequest {
+    string userId = 1;
+}
+
+message GetCartItemsIdsResponse {
+  repeated string courseIds = 1; // Repeated field to hold an array of course IDs
+  bool success = 2;         // Field for indicating success
 }
 
 message CourseStatusResponse {

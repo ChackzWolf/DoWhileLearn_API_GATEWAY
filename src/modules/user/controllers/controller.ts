@@ -4,6 +4,7 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import jwt, {VerifyErrors} from 'jsonwebtoken'
 import { PaymentClient } from "../../../config/grpc-client/paymentClient";
+import { CourseClient } from "../../../config/grpc-client/courseClient";
 
 
 export default class UserController {  
@@ -111,4 +112,31 @@ export default class UserController {
             }
         })
     }
+
+    getCartItems(req:Request, res:Response, next:NextFunction) {
+        console.log('trug')
+        const userId = req.query.userId as string;
+        UserClient.GetCartItemsIds({userId}, (err: ServiceError | null, GetIdsResult: any) => {
+            if(err){
+              console.error("gRPC error:", err);
+              return res.status(500).send("Error from gRPC service:" + err.message);
+            }
+            console.log(GetIdsResult, 'thsi is ersult for m  Getcartitems');
+            const {success, courseIds} = GetIdsResult
+            if(success){
+                CourseClient.GetCourseInCart({courseIds}, (err: ServiceError | null, result: any) => {
+                    if(err){
+                        console.error("gRPC error:", err);
+                        return res.status(500).send("Error from gRPC service:" + err.message);
+                    }
+                    console.log(result)
+                    res.status(StatusCode.OK).send(result);
+                });
+            }else{
+                return {success:false}
+            }
+        })
+    }
+
+
 }  

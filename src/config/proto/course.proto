@@ -8,7 +8,27 @@ service CourseService {
   rpc FetchCourse(emptyRequest) returns (ResponseFetchCourseList);
   rpc FetchTutorCourse(RequestFetchTutorCourse) returns (ResponseFetchCourseList);
   rpc FetchCourseDetails(RequestFetchCourseDetails) returns (ResponseFetchCourse);
+  rpc AddPurchasedUsers(AddPurchasedUsersRequest) returns (AddPurchasedUsersResponse);
+  rpc GetCourseInCart(GetCourseInCartRequest) returns (ResponseFetchCourseList);
 }
+
+message GetCourseInCartRequest {
+  repeated string courseIds = 1;
+}
+
+
+
+message AddPurchasedUsersRequest {
+    string courseId = 1;
+    string userId = 2;
+}
+
+message AddPurchasedUsersResponse {
+    bool success = 1;
+    string message = 2;
+    bool status = 3;
+}
+
 message RequestFetchCourseDetails {
   string id = 1;
 }
