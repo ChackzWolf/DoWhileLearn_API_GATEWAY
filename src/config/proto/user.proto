@@ -13,6 +13,15 @@ service UserService {
     rpc AddPurchasedCourses(addPurchasedCoursesRequest) returns (addPurchasedCoursesResponse);
     rpc CourseStatus(AddToCartRequest) returns(CourseStatusResponse);
     rpc GetCartItemsIds(GetCartItemsIdsRequest) returns (GetCartItemsIdsResponse);
+    rpc isBlocked (UserIdRequest) returns (BlockedStatusResponse);
+}
+
+message UserIdRequest {
+    string userId = 1;
+}
+
+message BlockedStatusResponse {
+    bool isBlocked = 1;
 }
 
 message GetCartItemsIdsRequest {

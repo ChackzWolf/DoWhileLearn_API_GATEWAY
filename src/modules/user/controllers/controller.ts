@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { UserClient } from "../../../config/grpc-client/userClient";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
-import jwt, {VerifyErrors} from 'jsonwebtoken'
 import { PaymentClient } from "../../../config/grpc-client/paymentClient";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 
@@ -25,14 +24,14 @@ export default class UserController {
 
     verifyOtp(req: Request, res: Response, next: NextFunction): void {
         UserClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
-            const {message, success, accessToken, refreshToken} = result;
+            const {message, success, accessToken, refreshToken, userId} = result;
             if (err) {
                 console.error("Error verifying OTP:", err);
                 return res.status(500).send(err.message);  // Return early if there's an error
             }
     
             if (success) {
-                res.status(200).json({ success: true, message: "OTP verified successfully.", accessToken, refreshToken });
+                res.status(200).json({ success: true, message: "OTP verified successfully.", accessToken, refreshToken, userId });
             } else {
                 res.status(400).json({ success: false, message});
             }
@@ -51,48 +50,42 @@ export default class UserController {
         }) 
     }
 
-    userLogin (req:Request, res:Response, next:NextFunction){ 
-        UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) =>{
-       
-            if(err){
-                res.status(500).send(err.message);
-            }else{
-                if(result.success){
-                    const {message, success, accessToken,refreshToken ,userId} = result;
-                    console.log(result)
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken , userId});
+    userLogin(req: Request, res: Response, next: NextFunction) { 
+        UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) => {
+            if (err) {
+                console.error("Login error:", err.message);
+                return res.status(500).send({ success: false, message: "Internal server error" });
+            }
+    
+            if (result && result.success) {
+                const { message, success, accessToken, refreshToken, userId } = result;
+                console.log(result)
+                if (success && refreshToken && accessToken) {
+                    // // Set HttpOnly cookies for access and refresh tokens
+                    // res.cookie('accessToken', accessToken, {
+                    //     httpOnly: true,
+                    //     secure: true,  // Only send over HTTPS in production
+                    //     sameSite: 'strict' // Helps mitigate CSRF attacks
+                    // });
+    
+                    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+
+                    return res.status(201).json({ message, success, userId , accessToken, refreshToken});
+                } else {
+                    // Handle cases where tokens are missing or invalid
+                    return res.status(400).json({ success: false, message: "Invalid token response." });
                 }
-            } 
-        })
+            } else {
+                // Handle failed login cases
+                if(result.message === 'isBlocked'){
+                    return res.status(403).json({ message: 'user blocked' });
+                }
+                return res.status(401).json({ success: false, message: "Login failed. Invalid credentials." });
+            }
+        });
     }
  
 
-    refreshToken(req: Request, res: Response) {
-        const refreshToken = req.cookies.refreshToken; // Get the refresh token from cookies
-    
-        if (!refreshToken) {
-            return res.status(401).json({ message: 'No refresh token provided' });
-        }
-    
-        // Correct callback usage
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, (err: VerifyErrors | null, decoded :any | null) => {
-            if (err) {
-                return res.status(403).json({ message: 'Invalid refresh token' });
-            }
-            if (!decoded) {
-                return res.status(403).json({ message: 'No user data in token' });
-            }
-    
-            // Generate a new access token
-            const accessToken = jwt.sign(
-                { id: decoded.id, email: decoded.email },
-                process.env.JWT_SECRET as string,
-                { expiresIn: '15m' } 
-            ); 
-             
-            res.json({ accessToken });
-        });
-    }
 
     addToCart(req: Request, res: Response, next:NextFunction){
         UserClient.AddToCart(req.body, (err: ServiceError | null, result: any) =>{ 
@@ -136,6 +129,22 @@ export default class UserController {
                 return {success:false}
             }
         })
+    }
+
+
+    clearCookie(req:Request, res:Response, next:NextFunction) {
+        console.log('trig clearCookie')
+
+        // res.cookie('refreshToken', '', { maxAge: 0, path: '/', httpOnly: true, secure: true });
+
+        res.clearCookie('refreshToken', {
+            path: '/',
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+        });
+        console.log(req.cookies.refreshToken,'removed cookie')
+        res.status(200).send({message:'Logged out',success:true});
     }
 
 

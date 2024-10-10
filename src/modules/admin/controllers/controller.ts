@@ -45,17 +45,18 @@ export default class AdminController {
      Login (req:Request, res:Response, next:NextFunction){
         AdminClient.Login(req.body, (err: ServiceError | null, result: any) =>{
             console.log(result , 'result ')
-            const {message, success, adminData, refreshToken, accessToken } = result;
+            
             if(err){
                 res.status(500).send(err.message);  
             }else{
+                const {message, success, adminData, refreshToken, accessToken } = result;
                 if(success){
                     res.cookie('refreshToken', refreshToken, { 
                         httpOnly: true , 
                         secure: true,
                         sameSite: 'strict' 
                     });
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,_id:adminData._id});
+                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken, _id:adminData._id});
                 }
             }
             

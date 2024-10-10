@@ -17,12 +17,13 @@ message IsAuthenticatedResponse {
 }
 
 message RefreshTokenRequest {
-    string accessToken = 1;
-    string rol = 2;
+    string refreshToken = 1;
 }
 
 message RefreshTokenResponse {
     bool success = 1;
     int32 status = 2;
     string message = 3;
+    string accessToken = 4;
+    string refreshToken = 5;
 }

@@ -27,7 +27,7 @@ const logger = winston.createLogger({
     new DailyRotateFile({
       filename: 'logs/application-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      maxFiles: '14d' // Keep logs for 14 days
+      maxFiles: '7d' // Keep logs for 14 days
     })
   ],
 });
@@ -40,20 +40,15 @@ app.use(morgan('combined', {
 
 
 
-
-
- 
-
-
 const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
 
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173'], // Allow both origins
-  credentials: true
-}));
 
+app.use(cors({
+  origin: 'http://localhost:5173', // Your frontend URL
+  credentials: true, // Allow credentials (cookies)
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", userRoute);
