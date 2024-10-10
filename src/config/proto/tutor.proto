@@ -7,7 +7,15 @@ service TutorService {
     rpc ResendOTP(OTPRequest) returns (OTPResponse);
     rpc FetchTutorData(EmptyRequest) returns (ResponseAllTutors);
     rpc ToggleBlock (ToggleBlockRequest) returns (ToggleBlockResponse);
-    rpc AddStudents (AddStudentsRequest) returns (AddStudentsResponse);
+    rpc isBlocked (TutorIdRequest) returns (BlockedStatusResponse);
+}
+
+message TutorIdRequest {
+    string tutorId = 1;
+}
+
+message BlockedStatusResponse {
+    bool isBlocked = 1;
 }
 
 message AddStudentsRequest {

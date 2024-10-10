@@ -29,7 +29,7 @@ export default class TutorController {
 
             const {success, message, tutorData} = result
             if (err) {  
-                console.error("Error verifying OTP:", err);
+                console.error("Error verifying OTP:", err); 
                 return res.status(500).send(err.message);  // Return early if there's an error
             }
       
@@ -88,4 +88,4 @@ export default class TutorController {
           res.status(StatusCode.OK).json(result);
         })
       }
-}  
+}    

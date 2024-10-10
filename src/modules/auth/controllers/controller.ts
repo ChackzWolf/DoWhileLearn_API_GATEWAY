@@ -59,7 +59,7 @@ export default class AuthController {
     }
     tutorRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.cookies.tutorrRefreshToken; // Extract refreshToken from cookies
+        const refreshToken = req.cookies.tutorRefreshToken; // Extract refreshToken from cookies
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
             res.status(401).json({ success: false, message: "Refresh token not provided." });
