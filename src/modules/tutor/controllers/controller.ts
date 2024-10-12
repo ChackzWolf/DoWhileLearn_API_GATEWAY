@@ -70,6 +70,13 @@ export default class TutorController {
                         sameSite: 'strict' 
                     });
                     res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,_id:tutorData._id});
+                }else{
+                    // Handle failed login cases
+                    if(result.message === 'isBlocked'){
+                        return res.status(403).json({ message: 'user blocked' });
+                    }
+                    return res.status(401).json({ success: false, message: "Login failed. Invalid credentials." });
+            
                 }
             }
             
