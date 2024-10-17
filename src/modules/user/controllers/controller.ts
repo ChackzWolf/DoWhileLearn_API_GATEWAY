@@ -147,5 +147,35 @@ export default class UserController {
         res.status(200).send({message:'Logged out',success:true});
     }
 
+    fetchCourseDetails(req:Request, res:Response, next: NextFunction){
+        console.log('trig')
+        const id = req.query.id as string; 
+        const userId = req.query.userId as string;
 
+        CourseClient.FetchCourseDetails({id}, (err:ServiceError | null,  result: any) => {
+          if(err){
+            console.log(err)
+            return res.status(500).send("Error from grpc servcie:"+ err.message);
+          }
+          const courseData = result;
+          console.log(result)
+          if(userId){
+            const data = {
+              userId,
+              courseId:id
+            }
+
+            UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
+              console.log(result, 'course status')
+              res.status(StatusCode.OK).json({courseData,courseStatus:result});
+            })
+          }else{
+            res.status(StatusCode.OK).json({courseData,inCart:false});
+          }
+        })
+    }
+
+    setNewPassword(req: Request, res: Response, next: NextFunction){
+        console.log('trig', req.body)
+    }
 }  

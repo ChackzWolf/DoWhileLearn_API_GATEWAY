@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import UserController from "../controllers/controller";
 import cookieParser from "cookie-parser";
-import { isAuthenticated } from "../../../middlewares/isBlockedMiddleware";
+import { isAuthenticated } from "../../../middlewares/isAuthMiddleware";
 const app = express();
 const userRoute: Application = express();
 
@@ -19,6 +19,8 @@ userRoute.post("/login", controller.userLogin);
 userRoute.post("/addToCart",middlware.checkUserBlocked, controller.addToCart);
 userRoute.post("/makePayment",middlware.checkUserBlocked, controller.makePayment);
 userRoute.get("/getCartItems",middlware.checkUserBlocked, controller.getCartItems)
+userRoute.get("/fetchCourseDetails",middlware.checkUserBlocked, controller.fetchCourseDetails)
+userRoute.get("/setNewPassword", controller.setNewPassword)
 
 
 

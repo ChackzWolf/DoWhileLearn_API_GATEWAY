@@ -1,7 +1,7 @@
 import express, {Application} from "express";
 import AuthController from "../controllers/controller";
 import cookieParser from "cookie-parser";
-import { isAuthenticated } from "../../../middlewares/isBlockedMiddleware";
+import { isAuthenticated } from "../../../middlewares/isAuthMiddleware";
 const app = express()
 const authRoute : Application = express();
 
