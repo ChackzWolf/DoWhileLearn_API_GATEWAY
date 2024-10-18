@@ -165,7 +165,7 @@ export default class UserController {
               courseId:id
             }
 
-            UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
+            UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => { 
               console.log(result, 'course status')
               res.status(StatusCode.OK).json({courseData,courseStatus:result});
             })
@@ -174,8 +174,30 @@ export default class UserController {
           }
         })
     }
-
-    setNewPassword(req: Request, res: Response, next: NextFunction){
-        console.log('trig', req.body)
+    sendOtpToEmail(req: Request, res: Response, next: NextFunction){
+        UserClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
     }
+
+    resetPasswordOTP(req: Request, res: Response, next: NextFunction){ 
+        console.log('trig')
+        UserClient.VerifyOTPResetPassword(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        });
+    }
+
+    resetPassword(req: Request, res: Response, next: NextFunction){
+        console.log(req.body,'trig')
+        UserClient.ResetPassword(req.body,(err:ServiceError | null, result:any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+         
+    }
+
+
+
 }  

@@ -8,6 +8,32 @@ service TutorService {
     rpc FetchTutorData(EmptyRequest) returns (ResponseAllTutors);
     rpc ToggleBlock (ToggleBlockRequest) returns (ToggleBlockResponse);
     rpc isBlocked (TutorIdRequest) returns (BlockedStatusResponse);
+    rpc SendOtpToEmail (SendOtpEmail) returns (SendOtpResponse);
+    rpc VerifyOTPResetPassword (OTPRequest) returns (OTPResponse);
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+}
+
+message ResetPasswordRequest {
+    string tutorId = 1;
+    string password = 2;
+}
+message ResetPasswordResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+}
+
+
+message SendOtpEmail {
+    string email = 1;
+}
+
+message SendOtpResponse {
+    string message = 1;
+    bool success = 2;
+    int32 status = 3;
+    string email = 4;
+    string tutorId = 5;
 }
 
 message TutorIdRequest {
@@ -75,6 +101,7 @@ message OTPResponse {
     int32 status = 4;
     string accessToken=5;
     string refreshToken = 6;
+    string tutorId = 7;
 }
 
 message LoginRequest {

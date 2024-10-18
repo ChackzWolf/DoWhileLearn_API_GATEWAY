@@ -89,4 +89,27 @@ export default class AdminController {
             res.status(StatusCode.Accepted).send(result)
         })
     }
+
+    sendOtpToEmail(req: Request, res: Response, next: NextFunction){
+        AdminClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }
+
+    resetPasswordOTP(req: Request, res: Response, next: NextFunction){ 
+        console.log('trig')
+        AdminClient.VerifyOTPResetPassword(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        });
+    }
+
+    resetPassword(req: Request, res: Response, next: NextFunction){
+        console.log(req.body,'trig')
+        AdminClient.ResetPassword(req.body,(err:ServiceError | null, result:any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }    
 }   

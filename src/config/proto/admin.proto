@@ -4,7 +4,34 @@ service AdminService {
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc VerifyOTP(OTPRequest) returns (OTPResponse);
     rpc ResendOTP(OTPRequest) returns (OTPResponse);
+    rpc SendOtpToEmail (SendOtpEmail) returns (SendOtpResponse);
+    rpc VerifyOTPResetPassword (OTPRequest) returns (OTPResponse);
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
 }
+
+message ResetPasswordRequest {
+    string adminId = 1;
+    string password = 2;
+}
+message ResetPasswordResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+}
+
+
+message SendOtpEmail {
+    string email = 1;
+}
+
+message SendOtpResponse {
+    string message = 1;
+    bool success = 2;
+    int32 status = 3;
+    string email = 4;
+    string adminId = 5;
+}
+
 
 
 message OTPRequest {
@@ -20,6 +47,7 @@ message OTPResponse {
     int32 status = 4;
     string accessToken=5;
     string refreshToken = 6;
+    string adminId = 7;
 }
 
 message LoginRequest {

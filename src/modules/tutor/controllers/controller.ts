@@ -73,9 +73,12 @@ export default class TutorController {
                 }else{
                     // Handle failed login cases
                     if(result.message === 'isBlocked'){
+                        console.log('here')
                         return res.status(403).json({ message: 'user blocked' });
                     }
-                    return res.status(401).json({ success: false, message: "Login failed. Invalid credentials." });
+
+                    console.log('reached her')
+                    return res.status(StatusCode.Created).json({ success: false, message: "Login failed. Invalid credentials." });
             
                 }
             }
@@ -94,5 +97,32 @@ export default class TutorController {
 
           res.status(StatusCode.OK).json(result);
         })
-      }
+    }
+    
+
+    sendOtpToEmail(req: Request, res: Response, next: NextFunction){
+        console.log('tutor trig',req.body)
+        TutorClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }
+    resetPasswordOTP(req: Request, res: Response, next: NextFunction){ 
+        console.log('trig')
+        TutorClient.VerifyOTPResetPassword(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        });
+    }
+
+    resetPassword(req: Request, res: Response, next: NextFunction){
+        console.log(req.body,'trig')
+        TutorClient.ResetPassword(req.body,(err:ServiceError | null, result:any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+         
+    }
+    
+    
 }    
