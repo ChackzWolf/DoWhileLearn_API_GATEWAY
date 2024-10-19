@@ -14,8 +14,10 @@ tutorRoute.post('/resendOTP', controller.resendOtp);
 tutorRoute.post("/login", controller.tutorLogin );    
 tutorRoute.post("/sendOtpToEmail", controller.sendOtpToEmail)
 tutorRoute.post("/resetPasswordOTP",controller.resetPasswordOTP)
-tutorRoute.post("/updatePassword",controller.resetPassword)
-
+tutorRoute.post("/updatePassword",controller.resetPassword);
+tutorRoute.post("/uploadImage",controller.UploadImage)
+tutorRoute.post("/uploadPDF", controller.UploadPDF);
+tutorRoute.post("/registerDetails", controller.registerDetails)
 tutorRoute.get("/fetchTutroCourse",middleware.checkTutorBlocked,controller.FetchTutorCourse)
 
 

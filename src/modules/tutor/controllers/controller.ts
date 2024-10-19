@@ -4,11 +4,118 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import createToken from "../../../utils/tokenActivation"
+import multer from "multer";
 
+const imageStorage = multer.memoryStorage(); // Store file in memory for image
+const pdfStorage = multer.memoryStorage(); // Store PDF file in memory
 
-
+const uploadImage = multer({ storage: imageStorage }).single('image'); // 'image' is the field name for image
+const uploadPDF = multer({ storage: pdfStorage }).single('pdf'); // 'pdf' is the field name for the PDF
 
 export default class TutorController {  
+
+    constructor() {
+        // Binding the method to the class instance
+        this.UploadImage = this.UploadImage.bind(this);
+        this.UploadPDF = this.UploadPDF.bind(this);
+    }
+    public UploadImage(req: Request,res :Response, next: NextFunction){
+        console.log(req.body, "trig image");
+        uploadImage(req, res, async (err: any) => {
+            console.log('1' , req)
+            
+          if (err) {
+            console.error('Multer error:', err);
+            return res.status(500).send('Error uploading file: ' + err.message);
+          }
+          console.log('2')
+          // Check if file is uploaded
+          if (!req.file) {
+            return res.status(400).send('No file uploaded');
+          }
+          console.log('3')
+          // Check if image name is provided
+          if (!req.file.originalname) {
+            return res.status(400).send('Image name is required');
+          }
+          console.log('4')
+          // Prepare data for gRPC request
+          const data = {
+            imageBinary: req.file.buffer,
+            imageName: req.file.originalname,
+          };
+          console.log(data, 'kkkkkkkkkkk')
+          // Call gRPC service
+          TutorClient.UploadImage(data, (err: ServiceError | null, result: any) => {
+            if (err) {
+              console.error('gRPC error:', err);
+              return res.status(500).send('Error from gRPC service: ' + err.message);
+            }
+      
+            // Retrieve and validate the public URL from gRPC response
+            const {s3Url, success, message} = result
+            console.log(result)
+            console.log(s3Url, success, message);
+            if (!success) {
+              return res.status(500).send('Failed to get image URL from gRPC service');
+            }
+            // Send the public URL back in the response
+            res.status(200).json({s3Url, success, message});
+          });
+        });
+    }
+
+    public UploadPDF(req: Request, res: Response, next: NextFunction) {
+        console.log(req.body, "trig data form pdf");
+        uploadPDF(req, res, async (err: any) => {
+            console.log('1', req);
+            
+            if (err) {
+                console.error('Multer error:', err);
+                return res.status(500).send('Error uploading file: ' + err.message);
+            }
+            console.log('2');
+
+            // Check if PDF is uploaded
+            if (!req.file) {
+                return res.status(400).send('No file uploaded');
+            }
+            console.log('3');
+
+            // Check if PDF name is provided
+            if (!req.file.originalname) {
+                return res.status(400).send('PDF name is required');
+            }
+            console.log('4');
+
+            // Prepare data for gRPC request
+            const data = {
+                pdfBinary: req.file.buffer,
+                pdfName: req.file.originalname,
+            };
+            console.log(data, 'kkkkkkkkkkk'); 
+
+            // Call gRPC service for PDF upload
+            TutorClient.UploadPDF(data, (err: ServiceError | null, result: any) => {
+                if (err) {
+                    console.error('gRPC error:', err);
+                    return res.status(500).send('Error from gRPC service: ' + err.message);
+                }
+
+                // Retrieve and validate the public URL from gRPC response
+                const { s3Url, success, message } = result;
+                console.log(result);
+                console.log(s3Url, success, message);
+                if (!success) {
+                    return res.status(500).send('Failed to get PDF URL from gRPC service');
+                }
+
+                // Send the public URL back in the response
+                res.status(200).json({ s3Url, success, message });
+            });
+        });
+    }
+
 
     register(req: Request, res: Response, next: NextFunction) {
         TutorClient.Register(req.body, (err: ServiceError | null, result: any) => {
@@ -113,7 +220,7 @@ export default class TutorController {
             console.log(result)
             res.status(StatusCode.OK).json(result);
         });
-    }
+    } 
 
     resetPassword(req: Request, res: Response, next: NextFunction){
         console.log(req.body,'trig')
@@ -124,5 +231,12 @@ export default class TutorController {
          
     }
     
+    registerDetails(req: Request, res: Response, next: NextFunction){
+        console.log(req.body, 'details')
+        TutorClient.RegistrationDetails(req.body,(err:ServiceError | null, result:any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }
     
 }    

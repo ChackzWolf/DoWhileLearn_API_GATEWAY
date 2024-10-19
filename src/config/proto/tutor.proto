@@ -11,7 +11,48 @@ service TutorService {
     rpc SendOtpToEmail (SendOtpEmail) returns (SendOtpResponse);
     rpc VerifyOTPResetPassword (OTPRequest) returns (OTPResponse);
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc UploadImage(ImageRequest) returns (ImageResponse);
+    rpc UploadPDF(PDFRequest) returns (PDFResponse);
+    rpc RegistrationDetails(RegistrationDetailsRequest) returns (RegistrationDetailsResponse);
 }
+
+message RegistrationDetailsResponse {
+    bool success = 1;
+    int32 status = 2;
+    string message =3;
+}
+message Qualification {
+  string qualification = 1;
+  string certificate = 2;
+}
+
+message RegistrationDetailsRequest {
+  string bio = 1;
+  repeated string expertise = 2;
+  repeated Qualification qualifications = 3;
+  string profilePicture = 4;
+  string cv = 5;
+}
+
+message PDFRequest {
+  bytes pdfBinary = 1;
+  string pdfName = 2;
+}
+message PDFResponse {
+  string message = 1;
+  string s3Url = 2;
+  bool success = 3;
+}
+message ImageRequest {
+  bytes imageBinary = 1;
+  string imageName = 2;
+}
+message ImageResponse {
+  string message = 1;
+  string s3Url = 2;
+  bool success = 3;
+}
+
 
 message ResetPasswordRequest {
     string tutorId = 1;

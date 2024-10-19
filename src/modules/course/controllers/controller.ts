@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { ServiceError } from "@grpc/grpc-js";
-import courseRoute from "../routes/route";
 import { StatusCode } from "../../../interface/enums";
 import { UserClient } from "../../../config/grpc-client/userClient";
 
