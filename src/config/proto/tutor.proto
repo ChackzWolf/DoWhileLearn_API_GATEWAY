@@ -9,17 +9,37 @@ service TutorService {
     rpc ToggleBlock (ToggleBlockRequest) returns (ToggleBlockResponse);
     rpc isBlocked (TutorIdRequest) returns (BlockedStatusResponse);
     rpc SendOtpToEmail (SendOtpEmail) returns (SendOtpResponse);
-    rpc VerifyOTPResetPassword (OTPRequest) returns (OTPResponse);
+    rpc ResendOtpToEmail (ResendOtpEmail) returns (ResendOtpResponse);
+    rpc VerifyOTPResetPassword (VerifyOTPResetPasswordRequest) returns (OTPResponse);
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
     rpc UploadImage(ImageRequest) returns (ImageResponse);
     rpc UploadPDF(PDFRequest) returns (PDFResponse);
     rpc RegistrationDetails(RegistrationDetailsRequest) returns (RegistrationDetailsResponse);
 }
 
+
+message VerifyOTPResetPasswordRequest {
+    string email = 1;
+    string otpId = 2;
+    string enteredOTP = 3;
+}
+
+
+message ResendOtpEmail {
+    string otpId = 1;
+    string email = 2;
+}
+message ResendOtpResponse {
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+}
 message RegistrationDetailsResponse {
     bool success = 1;
     int32 status = 2;
     string message =3;
+    tutorData tutorData = 4;
+
 }
 message Qualification {
   string qualification = 1;
@@ -32,6 +52,7 @@ message RegistrationDetailsRequest {
   repeated Qualification qualifications = 3;
   string profilePicture = 4;
   string cv = 5;
+  string tutorId = 6;
 }
 
 message PDFRequest {
@@ -75,6 +96,7 @@ message SendOtpResponse {
     int32 status = 3;
     string email = 4;
     string tutorId = 5;
+    string otpId = 6;
 }
 
 message TutorIdRequest {
@@ -119,6 +141,7 @@ message RegisterRequest {
     string lastName = 2;
     string email = 3;
     string password = 4;
+    string phoneNumber = 5;
 }
 
 message RegisterResponse {
@@ -166,4 +189,10 @@ message tutorData{
     string password = 4;
     string _id = 5;
     bool isblocked = 6;
+    string bio = 7;
+    repeated string expertise = 8;
+    repeated Qualification qualifications = 9;
+    string profilePicture = 10;
+    string cv = 11;
+    string tutorId = 12;
 }

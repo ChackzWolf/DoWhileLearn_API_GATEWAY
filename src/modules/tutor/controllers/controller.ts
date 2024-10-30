@@ -55,8 +55,8 @@ export default class TutorController {
             // Retrieve and validate the public URL from gRPC response
             const {s3Url, success, message} = result
             console.log(result)
-            console.log(s3Url, success, message);
-            if (!success) {
+            console.log(s3Url, success, message); 
+            if (!success) { 
               return res.status(500).send('Failed to get image URL from gRPC service');
             }
             // Send the public URL back in the response
@@ -134,7 +134,7 @@ export default class TutorController {
         TutorClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
             console.log(result,'result') 
 
-            const {success, message, tutorData} = result
+            const {success, message, tutorData, tutorId} = result
             if (err) {  
                 console.error("Error verifying OTP:", err); 
                 return res.status(500).send(err.message);  // Return early if there's an error
@@ -143,7 +143,7 @@ export default class TutorController {
             if (success) {   
                 const {refreshToken, accessToken} = createToken(tutorData,"TUTOR"); 
     
-                res.status(200).json({ success: true, message: "OTP verified successfully." , refreshToken, accessToken, id:tutorData._id});
+                res.status(200).json({ success: true, message: "OTP verified successfully." , refreshToken, accessToken, id:tutorData._id,tutorId, tutorData});
             } else {
                 res.status(400).json({ success: false, message: "Invalid OTP response." });
             }
@@ -151,15 +151,16 @@ export default class TutorController {
     }
  
     resendOtp(req:Request, res:Response, next:NextFunction){
+        console.log('triggered resend otp tutor')
         TutorClient.ResendOTP(req.body, (err: ServiceError | null, result: any) =>{
-            console.log('triggered resend api')
+            console.log('result:', result)
             if(err){
                 console.log(err); 
                 res.status(500).send(err.message);
             }else{ 
                 res.status(200).json(result);   
             }  
-        })  
+        })   
     }
 
     tutorLogin (req:Request, res:Response, next:NextFunction){
@@ -170,13 +171,14 @@ export default class TutorController {
                 res.status(500).send(err.message);  
             }else{
                 if(success){
+                        console.log(tutorData, 'tutor data')
                     const {refreshToken, accessToken} = createToken(tutorData, "TUTOR")
                     res.cookie('refreshToken', refreshToken, { 
-                        httpOnly: true, 
+                        httpOnly: true,  
                         secure: true, // Make sure to use 'secure' in production with HTTPS
                         sameSite: 'strict' 
                     });
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,_id:tutorData._id});
+                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,tutorId:tutorData._id, tutorData});
                 }else{
                     // Handle failed login cases
                     if(result.message === 'isBlocked'){
@@ -210,7 +212,7 @@ export default class TutorController {
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
         console.log('tutor trig',req.body)
         TutorClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
-            console.log(result)
+            console.log(result, 'of tutor send  otp result')
             res.status(StatusCode.OK).json(result);
         })
     }
@@ -234,6 +236,14 @@ export default class TutorController {
     registerDetails(req: Request, res: Response, next: NextFunction){
         console.log(req.body, 'details')
         TutorClient.RegistrationDetails(req.body,(err:ServiceError | null, result:any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }
+
+    resendPasswordOTP(req:Request, res: Response, next: NextFunction) {
+        console.log(req.body, 'trig from resend otp');
+        TutorClient.ResendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })

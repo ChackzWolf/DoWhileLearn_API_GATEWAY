@@ -15,8 +15,26 @@ service UserService {
     rpc GetCartItemsIds(GetCartItemsIdsRequest) returns (GetCartItemsIdsResponse);
     rpc isBlocked (UserIdRequest) returns (BlockedStatusResponse);
     rpc SendOtpToEmail (SendOtpEmail) returns (SendOtpResponse);
-    rpc VerifyOTPResetPassword (OTPRequest) returns (OTPResponse);
+    rpc ResendOtpToEmail (ResendOtpEmail) returns (ResendOtpResponse);
+    rpc VerifyOTPResetPassword (VerifyOTPResetPasswordRequest) returns (OTPResponse);
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+}
+
+message VerifyOTPResetPasswordRequest {
+    string email = 1;
+    string otpId = 2;
+    string enteredOTP = 3;
+}
+
+
+message ResendOtpEmail {
+    string otpId = 1;
+    string email = 2;
+}
+message ResendOtpResponse {
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
 }
 
 message ResetPasswordRequest {
@@ -37,9 +55,10 @@ message SendOtpEmail {
 message SendOtpResponse {
     string message = 1;
     bool success = 2;
-    int32 status = 3;
+    int32 status = 3; 
     string email = 4;
     string userId = 5;
+    string otpId = 6;
 }
 
 message UserIdRequest {
@@ -74,7 +93,6 @@ message addPurchasedCoursesResponse {
     string message = 2;
     bool status = 3;
 }
-
 message EmptyRequest {}
 
 message IsInCartResponse {

@@ -111,5 +111,12 @@ export default class AdminController {
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })
-    }    
+    }     
+    resendPasswordOTP(req:Request, res: Response, next: NextFunction) {
+        console.log(req.body, 'trig from resend otp');
+        AdminClient.ResendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }
 }   

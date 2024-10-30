@@ -19,6 +19,7 @@ userRoute.post("/login", controller.userLogin);
 userRoute.post("/addToCart",middlware.checkUserBlocked, controller.addToCart);
 userRoute.post("/makePayment",middlware.checkUserBlocked, controller.makePayment);
 userRoute.post("/sendOtpToEmail", controller.sendOtpToEmail)
+userRoute.post("/resendOtpToEmail", controller.resendPasswordOTP)
 userRoute.post("/resetPasswordOTP",controller.resetPasswordOTP)
 userRoute.post("/updatePassword",controller.resetPassword)
 
@@ -28,4 +29,5 @@ userRoute.get("/fetchCourseDetails",middlware.checkUserBlocked, controller.fetch
 
 
 
-export default userRoute;
+export default userRoute; 
+ 

@@ -21,45 +21,6 @@ export default class OrderController {
             }
 
             console.log(paymentResult, 'result from PaymentClient.SuccessPayment');
-            const orderData = paymentResult;
-
-            // Handle order creation
-            OrderClient.CreateOrder(orderData, async (err: ServiceError | null, orderResult: any) => {
-                if (err) { 
-                    console.error("Order creation error:", err);
-                    return res.status(500).send(err.message);
-                }
-
-                console.log(orderResult, 'result from OrderClient.CreateOrder');
-                const data = {
-                    userId: orderResult.order.userId,
-                    courseId: orderResult.order.courseId
-                };
-                const price = parseFloat(orderResult.order.price);
-                const moneyToAdd = (price * 0.95).toFixed(2)
-                console.log(moneyToAdd,'money to add tutor')
-                const dataToTutor = {
-                    tutorId: orderResult.order.tutorId,
-                    userId: orderResult.order.userId,
-                    tutorShare : moneyToAdd
-                };
-
-                // Concurrently execute the three functions
-                try {
-                    await Promise.all([
-                        addPurchasedCourses(data), 
-                        addPurchasedUsers(data),
-                        addStudents(dataToTutor)
-                    ]);
-
-                    // Success response after all services complete
-                    return res.status(200).json(orderResult);
-
-                } catch (err) {
-                    console.error("Error updating services:", err);
-                    return res.status(500).json({ message: 'Error updating purchase records', error: err });
-                }
-            });
         });
     }
 }

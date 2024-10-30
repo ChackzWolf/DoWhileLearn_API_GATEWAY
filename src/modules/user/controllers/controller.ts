@@ -51,12 +51,13 @@ export default class UserController {
     }
 
     userLogin(req: Request, res: Response, next: NextFunction) { 
+        console.log('trig user login')
         UserClient.UserLogin(req.body, (err: ServiceError | null, result: any) => {
             if (err) {
                 console.error("Login error:", err.message);
                 return res.status(500).send({ success: false, message: "Internal server error" });
             }
-    
+            console.log(result, 'result form user') 
             if (result && result.success) {
                 const { message, success, accessToken, refreshToken, userId } = result;
                 console.log(result)
@@ -72,15 +73,16 @@ export default class UserController {
 
                     return res.status(201).json({ message, success, userId , accessToken, refreshToken});
                 } else {
+                    console.log('triggered else')
                     // Handle cases where tokens are missing or invalid
-                    return res.status(400).json({ success: false, message: "Invalid token response." });
+                    return res.status(201).json({ success: false, message: result.message });
                 }
             } else {
                 // Handle failed login cases
                 if(result.message === 'isBlocked'){
                     return res.status(403).json({ message: 'user blocked' });
                 }
-                return res.status(401).json({ success: false, message: "Login failed. Invalid credentials." });
+                return res.status(StatusCode.NotAcceptable).json({ success: false, message: result.message });
             }
         });
     }
@@ -100,11 +102,11 @@ export default class UserController {
     makePayment(req:Request, res:Response, next:NextFunction) {
         PaymentClient.PurchasePayment(req.body, (err: ServiceError | null, result: any) => {
             console.log(result, 'result');
-            if(result.session_id) {
+            if(result) {
                 res.status(StatusCode.Created).send({session_id :result.session_id});
             }
         })
-    }
+    } 
 
     getCartItems(req:Request, res:Response, next:NextFunction) {
         console.log('trug')
@@ -173,9 +175,17 @@ export default class UserController {
             res.status(StatusCode.OK).json({courseData,inCart:false});
           }
         })
-    }
+    } 
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
         UserClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result)
+            res.status(StatusCode.OK).json(result);
+        })
+    }
+
+    resendPasswordOTP(req:Request, res: Response, next: NextFunction) {
+        console.log(req.body, 'trig from resend otp');
+        UserClient.ResendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })
