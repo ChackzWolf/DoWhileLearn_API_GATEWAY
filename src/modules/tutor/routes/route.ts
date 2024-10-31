@@ -18,7 +18,8 @@ tutorRoute.post("/updatePassword",controller.resetPassword);
 tutorRoute.post("/uploadImage",controller.UploadImage)
 tutorRoute.post("/uploadPDF", controller.UploadPDF);
 tutorRoute.post("/registerDetails", controller.registerDetails);
-tutorRoute.post("/resendOtpToEmail", controller.resendPasswordOTP)
+tutorRoute.post("/resendOtpToEmail", controller.resendPasswordOTP);
+tutorRoute.post("/fetchTutorDetails",middleware.checkTutorBlocked, controller.fetchTutorDetails)
 tutorRoute.get("/fetchTutroCourse",middleware.checkTutorBlocked,controller.FetchTutorCourse)
 
 
