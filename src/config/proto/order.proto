@@ -1,36 +1,42 @@
 syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 
 service OrderService {
-    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+    rpc FetchAllOrders (EmptyRequest) returns (FetchOrdersResponse);
+    rpc FetchOrderByTutorId (FetchOrderByTutorIdRequest) returns (FetchOrdersResponse);
+    rpc FetchOrderByUserId (FetchOrderByUserIdReqeust) returns (FetchOrdersResponse);
+    rpc FetchOrderByCourseId (FetchOrderByCourseIdRequest) returns (FetchOrdersResponse);
 }
 
-message CreateOrderRequest {
-    string courseId = 1;
-    string userId = 2;
-    string tutorId = 3;
-    string category = 4;
-    string thumbnail = 5;
-    string title = 6;
-    string price = 7;
-    string level = 8;
-    string totalLessons = 9;
-    string transactionId = 10;
-}
+message EmptyRequest{}
 
-message CreateOrderResponse {
-    createdOrder order = 1;          // Change this to sessionId for consistency
-    bool success = 2;
-    string message =3;
+message FetchOrderByTutorIdRequest {
+    string tutorId  = 1;
 }
-
-message createdOrder {
+message FetchOrderByUserIdReqeust {
     string userId = 1;
-    string courseId = 2;
-    string tutorId = 3;
-    string thumbnail = 4;
-    string title = 5;
-    string price = 6;
-    string transactionId = 7;
-    bool paymentStatus =8;
-    string _id = 9;
+}
+message FetchOrderByCourseIdRequest {
+    string courseId = 1;
+}
+
+message FetchOrdersResponse {
+    repeated Order orderData = 1;
+    bool success = 2;
+}
+
+message Order {
+  string userId = 1;
+  string transactionId = 2;
+  string tutorId = 3;
+  string courseId = 4;
+  string title = 5;
+  string thumbnail = 6;
+  string price = 7;
+  string adminShare = 8;       
+  string tutorShare = 9;       
+  google.protobuf.Timestamp createdAt = 10;  
+  bool paymentStatus = 11;      
+  string sessionId = 12;         
+  map<string, string> metadata = 13;  
 }

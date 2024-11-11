@@ -4,6 +4,7 @@ service CourseService {
   rpc UploadVideo(VideoRequest) returns (VideoResponse);
   rpc UploadImage(ImageRequest) returns (ImageResponse);
   rpc SubmitCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
+  rpc DeleteCourse(DeleteCourseRequest) returns (DeleteCourseResponse);
   rpc EditCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
   rpc FetchCourse(emptyRequest) returns (ResponseFetchCourseList);
   rpc FetchTutorCourse(RequestFetchTutorCourse) returns (ResponseFetchCourseList);
@@ -12,11 +13,17 @@ service CourseService {
   rpc GetCourseInCart(GetCourseInCartRequest) returns (ResponseFetchCourseList);
 }
 
+message DeleteCourseRequest {
+  string courseId = 1;
+}
+
+message DeleteCourseResponse {
+  int32 status = 1;
+  bool success = 2;
+}
 message GetCourseInCartRequest {
   repeated string courseIds = 1;
 }
-
-
 
 message AddPurchasedUsersRequest {
     string courseId = 1;
@@ -116,4 +123,5 @@ message Lesson {
 message SubmitCourseResponse {
   string message = 1;
   bool success = 2;
+  string courseId = 3;
 }

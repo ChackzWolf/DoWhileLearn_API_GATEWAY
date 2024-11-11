@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import express, { Express } from "express";
+import express, { Express , Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from 'morgan';
@@ -11,8 +11,7 @@ import adminRoute from "./modules/admin/routes/route";
 import courseRoute from "./modules/course/routes/route"
 import authRoute from "./modules/auth/routes/route";
 import orderRoute from "./modules/order/routes/route";
-import { producer, consumer } from './config/kafka.config/kafka';
-
+import chatRoutes from './Routes/chat';
 dotenv.config();
 const app: Express = express();
 
@@ -42,45 +41,26 @@ app.use(morgan('combined', {
 
 
 
-//Kafka config start
-// const startKafka = async () => {
-//   // Connect the producer
-//   await producer.connect();
-//   console.log('Kafka Producer connected');
-
-
-//   await consumer.connect();
-//   console.log('Kafka Consumer connected');
-
-
-//   await consumer.subscribe({ topic: 'Payment', fromBeginning: true });
-
-//   // Start consuming messages
-//   consumer.run({
-//     eachMessage: async ({ topic, partition, message }) => {
-//       if (message.value) { 
-//         console.log(`Received message: ${message.value.toString()}`);
-//         // Process your message here
-//       } else {
-//         console.warn('Received a message with null value');
-//       }
-//     },
-//   });
-// };
-//Kafka config end
-
-
-
-
 const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
-
-
+app.use(cors({
+  origin: 'your-frontend-domain',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+  credentials: true
+}));
 app.use(cors({
   origin: 'http://localhost:5173', // Your frontend URL
   credentials: true, // Allow credentials (cookies)
 }));
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", userRoute);
@@ -89,7 +69,7 @@ app.use("/admin",adminRoute)
 app.use("/course",courseRoute);
 app.use("/auth",authRoute)
 app.use("/order",orderRoute)
-
+app.use('/chat', chatRoutes);
 
 // startKafka().catch(console.error);
 app.listen(port, () => { 

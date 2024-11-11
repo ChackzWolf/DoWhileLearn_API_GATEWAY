@@ -4,6 +4,7 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import createToken from "../../../utils/tokenActivation"
+import { OrderClient } from "../../../config/grpc-client/orderClient";
 import multer from "multer";
 
 const imageStorage = multer.memoryStorage(); // Store file in memory for image
@@ -180,7 +181,7 @@ export default class TutorController {
                     });
                     res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,tutorId:tutorData._id, tutorData});
                 }else{
-                    // Handle failed login cases
+                    // Handle failed login cases 
                     if(result.message === 'isBlocked'){
                         console.log('here')
                         return res.status(403).json({ message: 'user blocked' });
@@ -193,9 +194,9 @@ export default class TutorController {
             }
             
         })
-    }
+    } 
 
-    FetchTutorCourse(req:Request, res:Response, next: NextFunction) {
+    fetchTutorCourse(req:Request, res:Response, next: NextFunction) {
         console.log('trig')
         const tutorId = req.query.tutorId as string;
         CourseClient.FetchTutorCourse({tutorId}, (err: ServiceError | null, result: any) => {
@@ -209,19 +210,19 @@ export default class TutorController {
     }
 
     fetchTutorDetails(req:Request, res:Response, next: NextFunction) {
-        console.log("Trig fetch course")
+        console.log("Trig fetch course//////////////////")
         const tutorId = req.query.tutorId as string;
-        TutorClient.FetchTutorTutor({tutorId}, (err: ServiceError | null, result: any) => {
+        TutorClient.FetchTutorDetails({tutorId}, (err: ServiceError | null, result: any) => {
             if(err){
             console.error("gRPC error:", err);
             return res.status(500).send("Error from gRPC service:" + err.message);
           }
-
+          console.log(result, 'result of fetching tutor details.')
           res.status(StatusCode.OK).json(result);
         })
     }
     
-
+ 
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
         console.log('tutor trig',req.body)
         TutorClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
@@ -261,5 +262,22 @@ export default class TutorController {
             res.status(StatusCode.OK).json(result);
         })
     }
+
+    updateTutorDetails(req:Request, res: Response, next:NextFunction){
+        TutorClient.UpdateTutorDetails(req.body, (err:ServiceError | null, result: any)=> {
+            console.log(result);
+            res.status(StatusCode.OK).json(result);
+        })
+    }
+
+    fetchOrdersOfTutor(req:Request, res:Response, next:NextFunction){
+        const tutorId = req.query.tutorId as string;
+        console.log('tutorId:', tutorId)
+        OrderClient.FetchOrderByTutorId({tutorId}, (err: ServiceError | null, result:any)=> {
+            console.log(result);
+            res.status(StatusCode.OK).json(result);
+        })
+    }
     
-}    
+
+}     

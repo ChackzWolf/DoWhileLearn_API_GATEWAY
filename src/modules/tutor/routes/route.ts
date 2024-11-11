@@ -4,7 +4,7 @@ import { isAuthenticated } from "../../../middlewares/isAuthenticated";
 
 
 const tutorRoute : Application = express();
-tutorRoute.use(express.json());
+tutorRoute.use(express.json()); 
 const controller = new TutorController();
 const middleware = new isAuthenticated() 
 
@@ -19,8 +19,11 @@ tutorRoute.post("/uploadImage",controller.UploadImage)
 tutorRoute.post("/uploadPDF", controller.UploadPDF);
 tutorRoute.post("/registerDetails", controller.registerDetails);
 tutorRoute.post("/resendOtpToEmail", controller.resendPasswordOTP);
-tutorRoute.post("/fetchTutorDetails",middleware.checkTutorBlocked, controller.fetchTutorDetails)
-tutorRoute.get("/fetchTutroCourse",middleware.checkTutorBlocked,controller.FetchTutorCourse)
+tutorRoute.post("/updateTutorDetails", controller.updateTutorDetails);
+
+tutorRoute.get("/fetchTutorDetails",middleware.checkTutorBlocked, controller.fetchTutorDetails)
+tutorRoute.get("/fetchTutorCourse",middleware.checkTutorBlocked,controller.fetchTutorCourse)
+tutorRoute.get("/fetchOrdersOfTutor",middleware.checkTutorBlocked, controller.fetchOrdersOfTutor)
 
 
 

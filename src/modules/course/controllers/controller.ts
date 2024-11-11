@@ -4,6 +4,7 @@ import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { ServiceError } from "@grpc/grpc-js";
 import { StatusCode } from "../../../interface/enums";
 import { UserClient } from "../../../config/grpc-client/userClient";
+import { TutorClient } from "../../../config/grpc-client/tutorClient";
 
 
 // Configure multer for file handling
@@ -58,29 +59,24 @@ export default class CourseController {
     UploadImage(req: Request, res: Response, next: NextFunction): void {
 
         uploadImage(req, res, async (err: any) => {
-            console.log('1' , req)
-            
           if (err) {
             console.error('Multer error:', err);
             return res.status(500).send('Error uploading file: ' + err.message);
           }
-          console.log('2')
           // Check if file is uploaded
           if (!req.file) {
             return res.status(400).send('No file uploaded');
           }
-          console.log('3')
           // Check if image name is provided
           if (!req.file.originalname) {
             return res.status(400).send('Image name is required');
           }
-          console.log('4')
           // Prepare data for gRPC request
           const data = {
             imageBinary: req.file.buffer,
             imageName: req.file.originalname,
           };
-          console.log(data, 'kkkkkkkkkkk')
+          console.log(data, 'datajj')
           // Call gRPC service
           CourseClient.UploadImage(data, (err: ServiceError | null, result: any) => {
             if (err) {
@@ -99,24 +95,67 @@ export default class CourseController {
             // Send the public URL back in the response
             res.status(200).json({s3Url, success, message});
           });
-        });
-      }; 
+        }); 
+      };  
 
 
+
+
+      // Uploading a new course
       SubmitCourse(req:Request, res:Response, next: NextFunction) {
         console.log('trig')
+        const data = req.body;
+        const {tutorId} = req.body;
+        console.log(data, ' data,,,');
         CourseClient.SubmitCourse(req.body, (err: ServiceError | null, result: any) => {
           if (err) {
             console.error('gRPC error:', err);
             return res.status(500).send('Error from gRPC service: ' + err.message);
           }
+          
           console.log(result); 
-          res.status(200).json(result);
-        })
-      } 
+          if(result.success){
+
+            const courseId = result.courseId;
+            const data = {
+              tutorId ,
+              courseId 
+            }
+            console.log('heading to tutorClient', data)
+            TutorClient.AddCourseToTutor(data, (err: ServiceError | null, tutorResult: any) => {
+              if(err){ // Rollbacking if error
+                console.error('gRPC error from tutor:', err);
+                  CourseClient.DeleteCourse(data, (err:ServiceError | null, DeleteCourseResult:any)=> {
+                  const response ={
+                    success: false,
+                    message: 'Course create failed'
+                  }
+                  res.status(200).json(response);
+                })
+              }
+              if(!tutorResult.success){ // Rollbacking if not success
+                console.log('tutor update was not success');
+                const data = {
+                  courseId
+                }
+                CourseClient.DeleteCourse(data, (err:ServiceError | null, DeleteCourseResult:any)=> {
+                  const response ={
+                    success: false,
+                    message: 'Course create failed'
+                  }
+                  res.status(200).json(response);
+                })
+              }
+              res.status(200).json(result);
+            });
+          }
+          
+        }) 
+      }  
+
 
       EditCourseDetails(req:Request, res:Response, next:NextFunction){
-        console.log('triggggggg', req.body)
+        console.log('trig', req.body)
         CourseClient.EditCourse(req.body, (err:ServiceError | null, result: any) => {
           if (err) {
             console.error('gRPC error:', err);

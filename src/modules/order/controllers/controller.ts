@@ -6,6 +6,7 @@ import { UserClient } from "../../../config/grpc-client/userClient";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { TutorClient } from "../../../config/grpc-client/tutorClient";
 import { addPurchasedCourses, addPurchasedUsers, addStudents } from "./use.case";
+import { StatusCode } from "../../../interface/enums";
 
 export default class OrderController {  
 
@@ -21,6 +22,7 @@ export default class OrderController {
             }
 
             console.log(paymentResult, 'result from PaymentClient.SuccessPayment');
+            res.status(StatusCode.OK).json(paymentResult);
         });
     }
 }
