@@ -3,11 +3,11 @@ import { Request, Response, NextFunction } from "express";
 import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { TutorClient } from "../config/grpc-client/tutorClient";
 
+ 
 
 
-
-
-export class isAuthenticated {
+  
+export class isAuthenticated {  
     // Middleware to check if the user is blocked
     checkUserBlocked(req: Request, res: Response, next: NextFunction) {
         const userId = req.cookies.userId;

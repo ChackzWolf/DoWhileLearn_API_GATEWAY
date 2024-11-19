@@ -156,6 +156,8 @@ export default class CourseController {
 
       EditCourseDetails(req:Request, res:Response, next:NextFunction){
         console.log('trig', req.body)
+        console.log(JSON.stringify(req.body, null, 2));
+
         CourseClient.EditCourse(req.body, (err:ServiceError | null, result: any) => {
           if (err) {
             console.error('gRPC error:', err);
@@ -163,11 +165,11 @@ export default class CourseController {
           }
           console.log(result); 
           res.status(200).json(result);
-        })
-      }
+        }) 
+      } 
 
       FetchCourse(req:Request, res:Response, next: NextFunction) {
-        console.log('trig')
+        console.log('trig') 
         CourseClient.FetchCourse(req.body, (err: ServiceError | null, result: any) => {
           if(err){
             console.error("gRPC error:", err);
@@ -176,10 +178,10 @@ export default class CourseController {
  
           res.status(200).json(result);
         })
-      }
+      } 
 
       FetchCourseDetails(req:Request, res:Response, next: NextFunction){
-        console.log('trig')
+        console.log('trig25')
         const id = req.query.id as string; 
         const userId = req.query.userId as string;
 
@@ -191,17 +193,26 @@ export default class CourseController {
           const courseData = result;
           console.log(result)
           if(userId){
+            console.log('have userId:' , userId);
             const data = {
               userId,
-              courseId:id
-            }
+              courseId:id  
+            } 
 
             UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
               console.log(result, 'course status')
               res.status(StatusCode.OK).json({courseData,courseStatus:result});
             })
           }else{
-            res.status(StatusCode.OK).json({courseData,inCart:false});
+            console.log('dont have userId ')
+            const courseStatus = {
+              inCart:false,
+              inPurchase:false,
+              inWishList:false
+            }
+            console.log(courseStatus);
+            
+            res.status(StatusCode.OK).json({courseData,courseStatus});
           }
           
         })

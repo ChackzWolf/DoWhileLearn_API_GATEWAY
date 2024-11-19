@@ -150,10 +150,10 @@ export default class UserController {
     }
 
     fetchCourseDetails(req:Request, res:Response, next: NextFunction){
-        console.log('trig')
+        console.log('trig 22')
         const id = req.query.id as string; 
         const userId = req.query.userId as string;
-
+        console.log(userId, '///////////////////////////////')
         CourseClient.FetchCourseDetails({id}, (err:ServiceError | null,  result: any) => {
           if(err){
             console.log(err)
@@ -162,6 +162,7 @@ export default class UserController {
           const courseData = result;
           console.log(result)
           if(userId){
+            console.log('have user id:', userId);
             const data = {
               userId,
               courseId:id
@@ -172,6 +173,7 @@ export default class UserController {
               res.status(StatusCode.OK).json({courseData,courseStatus:result});
             })
           }else{
+            console.log('dont have userId: ' , userId);
             res.status(StatusCode.OK).json({courseData,inCart:false});
           }
         })
@@ -208,6 +210,28 @@ export default class UserController {
          
     }
 
+    addReview(req: Request, res:Response, next: NextFunction){
+        console.log('triggered add review', req.body);
+        CourseClient.AddReview(req.body,(err:ServiceError | null, result:any)=> {
+            console.log(result, 'result from adding review');
+            res.status(StatusCode.OK).json(result);
+        })
+    } 
 
+    fetchReviewsOfCourse(req: Request, res:Response, next: NextFunction){
+        console.log('triggered add review.', req.query.courseId);
+        const courseId = req.query.courseId as string; 
+        CourseClient.FetchReviewsOfCourse({courseId}, (err:ServiceError | null, result:any) =>{
+            console.log(result);
+            if(result){
+                console.log('sending to user')
+                UserClient.AttachNameToReview(result, (err:ServiceError | null, finalResult:any)=> {
+                    console.log(finalResult, 'result by fetching  user name ');
+                    res.status(StatusCode.OK).json(finalResult);
+                })
+            }
+
+        })
+    } 
 
 }  

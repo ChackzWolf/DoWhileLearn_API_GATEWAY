@@ -18,6 +18,15 @@ service UserService {
     rpc ResendOtpToEmail (ResendOtpEmail) returns (ResendOtpResponse);
     rpc VerifyOTPResetPassword (VerifyOTPResetPasswordRequest) returns (OTPResponse);
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc AttachNameToReview(AttachNameToReviewRequest) returns (AttachNameToReviewResponse);
+}
+
+message AttachNameToReviewRequest {
+    repeated ReviewData reviewData = 1;  
+}
+
+message AttachNameToReviewResponse {
+    repeated UpdatedReviewData reviewData = 1; 
 }
 
 message VerifyOTPResetPasswordRequest {
@@ -192,4 +201,21 @@ message LoginResponse {
     string message = 4;
     int32 status = 5;
     string userId = 6;
+}
+
+message ReviewData {
+  string userId = 1;
+  string courseId = 2;
+  int32 rating = 3;
+  string comment = 4;
+  string updatedAt = 5;
+}
+
+message UpdatedReviewData {
+  string userId = 1;
+  string courseId = 2;
+  int32 rating = 3;
+  string comment = 4;
+  string updatedAt = 5;
+  string name = 6;
 }

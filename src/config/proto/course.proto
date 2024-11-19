@@ -11,6 +11,22 @@ service CourseService {
   rpc FetchCourseDetails(RequestFetchCourseDetails) returns (ResponseFetchCourse);
   rpc AddPurchasedUsers(AddPurchasedUsersRequest) returns (AddPurchasedUsersResponse);
   rpc GetCourseInCart(GetCourseInCartRequest) returns (ResponseFetchCourseList);
+  rpc AddReview(ReviewData) returns (AddReviewResponse);
+  rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
+} 
+
+message FetchReviewsOfCourseRequest {
+  string courseId = 1;
+}
+
+message FetchReviewsOfCourseResponse {
+  repeated ReviewData reviewData = 1;
+}
+
+message AddReviewResponse {
+  string message = 1;
+  int32 status = 2;
+  bool success = 3;
 }
 
 message DeleteCourseRequest {
@@ -81,8 +97,10 @@ message ResponseFetchCourse {
   string thumbnail = 8;
   BenefitsPrerequisites benefits_prerequisites = 9;
   repeated Module Modules = 10;
-   string _id = 11;
-   string tutorId = 12;
+  string _id = 11;
+  string tutorId = 12;
+  int32 averageRating = 13;
+  int32 ratingCount = 14;
 }
 
 
@@ -118,10 +136,58 @@ message Lesson {
   string title = 1;
   string video = 2;
   string description = 3;
+  repeated Question questions = 4;
 } 
+
+message Question {
+  int64 id = 1;
+  string type = 2;
+  string question = 3;
+
+  // Optional fields for quiz questions
+  repeated string options = 4;
+  int32 correctAnswer = 5;
+
+  // Optional fields for coding questions
+  string startingCode = 6;
+  int32 noOfParameters = 7;
+  repeated Parameter parameters = 8;
+  ExpectedOutput expectedOutput = 9;
+  repeated TestCase testCases = 10;
+}
+
+message Parameter {
+  string value = 1;
+  string dataType = 2;
+}
+
+message ExpectedOutput {
+  string value = 1;
+  string dataType = 2;
+}
+
+message TestCase {
+  repeated Parameter parameters = 1;
+  ExpectedOutput expectedValue = 2;
+}
+
+
+
+
+
+
+
 
 message SubmitCourseResponse {
   string message = 1;
   bool success = 2;
   string courseId = 3;
+}
+
+message ReviewData {
+  string userId = 1;
+  string courseId = 2;
+  int32 rating = 3;
+  string comment = 4;
+  string updatedAt = 5;
 }
