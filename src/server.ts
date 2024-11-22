@@ -1,4 +1,6 @@
 import dotenv from "dotenv";
+import { createServer } from 'http';
+
 import express, { Express , Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -11,26 +13,30 @@ import adminRoute from "./modules/admin/routes/route";
 import courseRoute from "./modules/course/routes/route"
 import authRoute from "./modules/auth/routes/route";
 import orderRoute from "./modules/order/routes/route";
-import chatRoutes from './Routes/chat';
+import chatRoute from "./modules/chat/routes/route";
+import { initializeSocket } from "./socket/socketServer";
 dotenv.config();
-const app: Express = express();
 
+
+const app: Express = express();
+const server = createServer(app)
+initializeSocket(server);
 
 // error log
 const logger = winston.createLogger({
-  level: 'info',
+  level: 'info', 
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
-  ),
-  transports: [
+  ), 
+  transports: [ 
     new winston.transports.Console(), // Log to the console
     new DailyRotateFile({
       filename: 'logs/application-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
       maxFiles: '7d' // Keep logs for 14 days
     })
-  ],
+  ],  
 });
 app.use(morgan('combined', {
   stream: {
@@ -41,24 +47,25 @@ app.use(morgan('combined', {
 
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.use(cookieParser());
 app.use(cors({
-  origin: 'your-frontend-domain',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Authorization', 'Content-Type'],
-  credentials: true
-}));
-app.use(cors({
   origin: 'http://localhost:5173', // Your frontend URL
-  credentials: true, // Allow credentials (cookies)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include all HTTP methods you need
+  allowedHeaders: ['Authorization', 'Content-Type'], // Include any headers your frontend sends
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }));
+// app.use(cors({
+//   origin: 'http://localhost:5173', // Your frontend URL
+//   credentials: true, // Allow credentials (cookies)
+// }));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
+
 
 
 app.use(express.json());
@@ -69,10 +76,9 @@ app.use("/admin",adminRoute)
 app.use("/course",courseRoute);
 app.use("/auth",authRoute)
 app.use("/order",orderRoute)
-app.use('/chat', chatRoutes);
+app.use('/chat', chatRoute);
 
 // startKafka().catch(console.error);
-app.listen(port, () => { 
+server.listen(port, () => {
   console.log(`API_GATEWAY is running on ${port}`);
-}); 
-  
+});

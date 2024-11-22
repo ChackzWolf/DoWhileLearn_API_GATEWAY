@@ -4,6 +4,7 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import { PaymentClient } from "../../../config/grpc-client/paymentClient";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
+import { Service } from "ts-node";
 
 
 export default class UserController {  
@@ -11,7 +12,6 @@ export default class UserController {
     register(req: Request, res: Response, next: NextFunction) {
         UserClient.Register(req.body, (err: ServiceError | null, result: any) => {
             console.log('triggered api')
-       
             console.log(result)
             if (err) {
                 console.error(err);
@@ -160,6 +160,9 @@ export default class UserController {
             return res.status(500).send("Error from grpc servcie:"+ err.message);
           }
           const courseData = result;
+          console.log('Raw course data:', JSON.stringify(courseData, null, 2));
+          console.log('Raw course data structure:', Object.keys(courseData));
+
           console.log(result)
           if(userId){
             console.log('have user id:', userId);
@@ -233,5 +236,16 @@ export default class UserController {
 
         })
     } 
+ 
+    fetchPurchasedCourses(req: Request, res:Response, next: NextFunction) {
+        console.log('triggered fetch purchased course');
+        const userId = req.query.userId;
+        CourseClient.FetchPurchasedCourses({userId}, (err: ServiceError | null, result:any)=>{
+            console.log(result, 'fetched purchased course')
+            res.status(StatusCode.OK).json(result);
+        })
+    }
+
+     
 
 }  

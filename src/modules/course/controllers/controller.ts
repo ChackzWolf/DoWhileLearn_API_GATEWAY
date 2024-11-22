@@ -108,6 +108,7 @@ export default class CourseController {
         const {tutorId} = req.body;
         console.log(data, ' data,,,');
         CourseClient.SubmitCourse(req.body, (err: ServiceError | null, result: any) => {
+          console.log(JSON.stringify(req.body, null, 2));
           if (err) {
             console.error('gRPC error:', err);
             return res.status(500).send('Error from gRPC service: ' + err.message);
@@ -191,6 +192,7 @@ export default class CourseController {
             return res.status(500).send("Error from grpc servcie:"+ err.message);
           }
           const courseData = result;
+          console.log(JSON.stringify(courseData, null, 2))
           console.log(result)
           if(userId){
             console.log('have userId:' , userId);

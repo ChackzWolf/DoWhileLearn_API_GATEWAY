@@ -13,7 +13,13 @@ service CourseService {
   rpc GetCourseInCart(GetCourseInCartRequest) returns (ResponseFetchCourseList);
   rpc AddReview(ReviewData) returns (AddReviewResponse);
   rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
-} 
+  rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourse);
+}
+
+message FetchPurchasedCourseRequest {
+    string userId = 1;
+}
+
 
 message FetchReviewsOfCourseRequest {
   string courseId = 1;
@@ -143,17 +149,19 @@ message Question {
   int64 id = 1;
   string type = 2;
   string question = 3;
+  string difficulty = 4;
 
   // Optional fields for quiz questions
-  repeated string options = 4;
-  int32 correctAnswer = 5;
+  repeated string options = 5;
+  int32 correctAnswer = 6;
 
   // Optional fields for coding questions
-  string startingCode = 6;
-  int32 noOfParameters = 7;
-  repeated Parameter parameters = 8;
-  ExpectedOutput expectedOutput = 9;
-  repeated TestCase testCases = 10;
+  string startingCode = 7;
+  int32 noOfParameters = 8;
+  repeated Parameter parameters = 9;
+  ExpectedOutput expectedOutput = 10;
+  repeated TestCase testCases = 11;
+  string solution = 12;
 }
 
 message Parameter {

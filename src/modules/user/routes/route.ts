@@ -28,7 +28,7 @@ userRoute.post('/addUserReview', controller.addReview);
 userRoute.get('/fetchReviewsOfCourse', controller.fetchReviewsOfCourse);
 userRoute.get("/getCartItems",middlware.checkUserBlocked, controller.getCartItems)
 userRoute.get("/fetchCourseDetails",middlware.checkUserBlocked, controller.fetchCourseDetails)
-
+userRoute.get("/fetchPurchasedCourses", middlware.checkUserBlocked, controller.fetchPurchasedCourses)
 
 
 
