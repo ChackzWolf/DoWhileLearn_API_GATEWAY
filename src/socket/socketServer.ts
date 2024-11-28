@@ -1,113 +1,173 @@
+
 import { Server, Socket } from 'socket.io';
-import { Server as HttpServer } from 'http';
-interface ChatMessage {
-    userId: string;
-    text: string;
-    courseId?: string;  
-  }
-  
-// Global io variable to access the socket instance
-let io: Server;
+import jwt from 'jsonwebtoken';
+import { ChatClient } from '../config/grpc-client/chatClient';
+import { UserClient } from '../config/grpc-client/userClient';
+import { CourseClient } from '../config/grpc-client/courseClient';
 
-// Function to initialize the socket connection
-export const initializeSocket = (server: HttpServer) => {
-    io = new Server(server, {
+// Interfaces
+interface AuthenticatedSocket extends Socket {
+    userId?: string;
+    courseIds?: string[];
+}
+
+// Express and Socket.IO Setup
+export const setupSocket = (server: any) => {
+    const io = new Server(server, {
         cors: {
-            origin: 'http://localhost:5173', 
-            methods: ['POST', 'GET'],
-            credentials: true,
-        },
-        allowEIO3:true,
+            origin: 'http://localhost:5173', // Frontend URL
+            methods: ['GET', 'POST']
+        }
     });
 
-    // Main connection logic
-    io.on('connection', (socket: Socket) => {
-        console.log('User connected:', socket.id);
+    // JWT Secret (store in environment variable)
+    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your_jwt_secret';
 
-        //joining a room for a particular course
-        socket.on('joinRoom', async(courseId) => {
-            console.log(`User ${socket.id} joined room ${courseId}`);
-            socket.join(courseId);
+    // Authentication Middleware
+    const authenticateSocket = (socket: AuthenticatedSocket, next: (err?: Error) => void) => {
+        console.log('trigered by chat')
+        const token = socket.handshake.auth.token;
+        console.log('token', token)
+        try {
+            const decoded: any = jwt.verify(token, REFRESH_TOKEN_SECRET);
+            console.log('token check :', decoded)
+            socket.userId = decoded.id;
 
-            //fetch existing messages for  the course from database
-            const previousMessage:any = ""// loading previouse messages with cousrse id.
-            console.log('bla blb bla bla ',previousMessage)
-            //const messagesWithUserDetails = await Promise.all(previousMessage.result.map(async (msg: any) => {
-                //add details to each messages with user id
-                // const userInfo: any = await userRabbitMqClient.produce(msg.userId, 'getUserDetails');
-                // return {
-                //     ...msg,
-                //     userName: `${userInfo.user.firstName} ${userInfo.user.lastName} `,
-                //     profilePicture: userInfo.user.profilePicture || ""
-                // };
-          //  }));
-       // console.log('messageWithUserDetails',messagesWithUserDetails)
-       // socket.emit('loadPreviousMessages',messagesWithUserDetails)
-        });
- 
-        socket.on('leaveRoom', (courseId) => {
-            console.log(`User ${socket.id} left room ${courseId}`);
-            socket.leave(courseId);
-        });
+            // Fetch user's purchased courses via gRPC
+            CourseClient.FetchPurchasedCourses({ userId: decoded.id },
+                (err: Error | null, response: any) => {
+                    if (err) {
+                        return next(new Error('Authentication failed'));
+                    }
 
-        // Listener for 'sendMessage' event from client
-        socket.on('sendMessage', async({ courseId, message }: { courseId: string, message: ChatMessage & { id: string } }) => {
-            console.log(message,courseId);
-            try{
-                const saveMessage ="" // saving message to chat service await  chatRabbitMqClient.produce(message,'save-message');
-                console.log('message saving is',saveMessage)
-                // Emit the message to the correct course room
-                console.log('sssssss',message)
-
-                const userInfo:any= ""// GETING USER DETAILS await userRabbitMqClient.produce(message.userId,'getUserDetails');
-                console.log("user details from message",message.text,'==',userInfo.user)
-                const messageWithUserDetails ={
-                    ...message,
-                    userName:`${userInfo.user.firstName} ${userInfo.user.lastName}`,
-                    profilePicture:userInfo.user.profilePicture
+                    socket.courseIds = response.courses.map((course: any) => course._id)
+                    console.log(socket.courseIds, 'courseIds')
+                    next();
                 }
-                
-                io.to(courseId).emit('receiveMessage', { courseId, ...messageWithUserDetails });
-            }catch(error){
-                console.log("Error in chat",error);
-                socket.emit('error', { message: 'Error processing the chat message' });               
+            );
+        } catch (error) {
+            console.log('error occured', error);
+            next(new Error('Authentication failed'));
+        }
+    }; 
+
+    // Socket.IO Connection Handler
+    io.use(authenticateSocket);
+
+    io.on('connection', (socket: AuthenticatedSocket) => {
+        console.log('New client connected', socket.userId);
+
+
+        socket.on("get_chat_rooms", (userId,callback)=> {
+            console.log('trigered chat rooms',userId)
+            ChatClient.GetUserChatRooms(userId, (err:Error | null, chatRooms:any)=>{
+                console.log(chatRooms,'chat rooms')
+                console.log('calling back chat rooms', chatRooms)
+                callback(chatRooms);
+                socket.emit("chat_rooms", chatRooms);
+            })
+        }) 
+
+        // Join Course Room
+        socket.on('join_course_room', ({ courseId,userId }) => {
+            // Verify user is authorized for this course
+            if (socket.courseIds?.includes(courseId)) { 
+                socket.join(`course_${courseId}`); 
+                console.log(`User ${socket.userId} joined course room ${courseId}`);
             }
+            const data = {
+                courseId,
+                userId,
+                limit: 100,
+                before: '', 
+            }
+
+            ChatClient.getMessages(data, (err: Error | null, result: any) => {
+                console.log(result, 'result fetching messages');
+                if (result) {
+                    io.emit('course_messages', result.messages);
+                }
+            })
+        });
+
+        // Send Message
+        socket.on('send_message', async ({ courseId, content }, callback) => {
+            try {
+              console.log('Triggered send message', courseId, content);
+          
+              // Fetch user details via gRPC
+              UserClient.GetUserDetails({ userId: socket.userId }, async (err:Error, response:any) => {
+                if (err) {
+                  console.error('Error fetching user details:', err);
+                  return callback({ error: 'Failed to fetch user details' });
+                }
            
+                const { firstName, lastName } = response.userData;
+                console.log(socket.courseIds, 'socket courseIds');
+          
+                // Verify if the user is part of the course
+                if (socket.courseIds?.includes(courseId)) {
+                  const message = {
+                    id: generateUniqueId(), // Replace with a proper ID generator
+                    userId: socket.userId,
+                    username: `${firstName} ${lastName}`,
+                    content,
+                    timestamp: new Date(),
+                  };
+          
+                  // Broadcast message to the course room
+                  console.log('Broadcasting to course room');
+                  io.to(`course_${courseId}`).emit('new_message', message);
+          
+                  // Save message to database
+                  try {
+                    const savedMessage = await saveMessageToChatService(message, courseId);
+                    callback({success:savedMessage,message,courseId}); // Return saved message to client
+                  } catch (dbError) {
+                    console.error('Error saving message to database:', dbError);
+                    callback({ error: 'Failed to save message' });
+                  }
+                } else {
+                  callback({ error: 'User not part of this course' });
+                }
+              });
+            } catch (error) {
+              console.error('Error in send_message event:', error);
+              callback({ error: 'An unexpected error occurred' });
+            }
+          });
+          
+
+    // Helper function to save message (to be implemented with gRPC chat service)
+    const saveMessageToChatService = (message: any, courseId: string): Promise<any> => {
+        return new Promise((resolve, reject) => {
+            console.log('trig save message to chat service');
+    
+            const data = {
+                ...message,
+                courseId,
+            };
+    
+            console.log('message: ', message);
+            console.log(courseId, "courseId;");
+    
+            ChatClient.SaveMessage(data, (err: Error | null, result: any) => {
+                if (err) {
+                    console.error('Error saving message:', err);
+                    reject(err);
+                } else {
+                    console.log(result, 'response');
+                    resolve(result.success);
+                }
+            });
         });
+    };
+    
 
-
-
-
-
-        // socket.on('sendImage', async ({ courseId, imageMessage }: { courseId: string; imageMessage: { userId: string; image: string } }) => {
-        //     try {
-        //       // Save image message (optional, depending on requirements)
-        //       const saveImageMessage = await chatRabbitMqClient.produce(imageMessage, 'save-image-message');
-          
-        //       // Get user details for the message
-        //       const userInfo: any = await userRabbitMqClient.produce(imageMessage.userId, 'getUserDetails');
-          
-        //       const imageMessageWithUserDetails = {
-        //         ...imageMessage,
-        //         userName: userInfo.user.name,
-        //         profilePicture: userInfo.user.profilePicture,
-        //       };
-          
-        //       // Emit image message to the course room
-        //       io.to(courseId).emit('receiveMessage', { courseId, ...imageMessageWithUserDetails });
-        //     } catch (error) {
-        //       console.log("Error in sending image", error);
-        //       socket.emit('error', { message: 'Error processing the image message' });
-        //     }
-        //   });
-          
-
-        
-          
-
-        // Handle disconnection
-        socket.on('disconnect', () => {
-            console.log('User disconnected:', socket.id);
-        });
-    });
-};
+    // Helper function to generate unique ID
+    const generateUniqueId = (): string => {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    };
+    return io;
+}
+    )}

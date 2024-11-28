@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import { createServer } from 'http';
-
 import express, { Express , Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -14,13 +13,13 @@ import courseRoute from "./modules/course/routes/route"
 import authRoute from "./modules/auth/routes/route";
 import orderRoute from "./modules/order/routes/route";
 import chatRoute from "./modules/chat/routes/route";
-import { initializeSocket } from "./socket/socketServer";
+import { setupSocket } from "./socket/socketServer";
 dotenv.config();
 
 
 const app: Express = express();
 const server = createServer(app)
-initializeSocket(server);
+setupSocket(server);
 
 // error log
 const logger = winston.createLogger({
@@ -42,7 +41,7 @@ app.use(morgan('combined', {
   stream: {
     write: (message) => logger.info(message.trim())
   }
-}));
+})); 
 // error log end
 
 
@@ -56,10 +55,6 @@ app.use(cors({
   allowedHeaders: ['Authorization', 'Content-Type'], // Include any headers your frontend sends
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }));
-// app.use(cors({
-//   origin: 'http://localhost:5173', // Your frontend URL
-//   credentials: true, // Allow credentials (cookies)
-// }));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);

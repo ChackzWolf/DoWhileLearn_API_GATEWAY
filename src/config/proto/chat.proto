@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+service ChatService {
+  rpc SaveMessage (Message) returns (MessageResponse);
+  rpc GetMessages (CourseRequest) returns (MessagesResponse);
+  rpc VerifyAccess (AccessRequest) returns (AccessResponse);
+  rpc GetUserChatRooms (GetChatRoomsRequest) returns (GetChatRoomsResponse);
+  rpc CreateChatRoom(CreateChatRoomRequest) returns (CreateChatRoomResponse);
+}
+message CreateChatRoomRequest {
+  string courseId = 1;
+  string courseName = 2;
+  string thumbnail = 3;
+  string tutorId = 4;
+}
+
+message CreateChatRoomResponse {
+  bool success = 1;
+  int32 status = 2;
+}
+
+message GetChatRoomsRequest {
+  string userId = 1;
+}
+
+message GetChatRoomsResponse {
+  repeated ChatRoom chatRooms = 1;
+}
+
+message ChatRoom {
+  string courseId = 1;
+  ChatRoomMessage lastMessage = 2;
+  string updatedAt = 3;
+  string _id = 4;
+  string thumbnail = 5;
+  string name = 6;
+  string tutorId = 7;
+}
+
+message ChatRoomMessage {
+  string username = 1;
+  string userId = 2;
+  string content = 3;
+}
+
+
+message Message {
+  string id = 1;
+  string courseId = 2;
+  string userId = 3;
+  string content = 4;
+  string timestamp = 5;
+  string username = 6;
+}
+
+message MessageResponse {
+  bool success = 1;
+}
+
+message CourseRequest {
+  string courseId = 1;
+  string userId = 2;
+  optional int32 limit = 3;
+  optional string before = 4;
+}
+
+message MessagesResponse {
+  repeated Message messages = 1;
+  bool hasMore = 2;
+  string error = 3;
+}
+
+message AccessRequest {
+  string userId = 1;
+  string courseId = 2;
+}
+
+message AccessResponse {
+  bool hasAccess = 1;
+  string error = 2;
+}

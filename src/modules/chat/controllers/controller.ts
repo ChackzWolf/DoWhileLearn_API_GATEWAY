@@ -2,7 +2,7 @@ import { StatusCode } from "../../../interface/enums";
 import axios from "axios";
 import { Request, Response } from "express";
 import { ServiceError } from "@grpc/grpc-js";
-import { CourseClient } from "../../../config/grpc-client/courseClient";
+import { CourseClient } from "../../../config/grpc-client/courseClient"; 
 // Service URLs
 const CHAT_SERVICE_URL = "http://chat-service:4000"; // Replace with your Chat Service's URL
 
@@ -24,7 +24,7 @@ export default class ChatController {
           }
       };
 
-      public joinChatRoom = async (req:Request, res: Response) => {
+      public joinChatRoom = async (req:Request, res: Response) => { 
         try {
           const { courseId, userId } = req.body;
           // Forward join room request to Chat Service

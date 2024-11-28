@@ -13,7 +13,7 @@ service CourseService {
   rpc GetCourseInCart(GetCourseInCartRequest) returns (ResponseFetchCourseList);
   rpc AddReview(ReviewData) returns (AddReviewResponse);
   rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
-  rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourse);
+  rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourseList);
 }
 
 message FetchPurchasedCourseRequest {
@@ -180,17 +180,14 @@ message TestCase {
 }
 
 
-
-
-
-
-
-
 message SubmitCourseResponse {
   string message = 1;
   bool success = 2;
   string courseId = 3;
+  string courseTitle =4;
+  string thumbnail = 5;
 }
+
 
 message ReviewData {
   string userId = 1;

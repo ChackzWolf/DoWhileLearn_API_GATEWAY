@@ -1,2 +1,0 @@
-{"level":"info","message":"::1 - - [28/Sep/2024:07:49:56 +0000] \"OPTIONS /login HTTP/1.1\" 204 0 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36\"","timestamp":"2024-09-28T07:49:56.375Z"}
-{"level":"info","message":"::1 - - [28/Sep/2024:07:50:46 +0000] \"OPTIONS /login HTTP/1.1\" 204 0 \"http://localhost:5173/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36\"","timestamp":"2024-09-28T07:50:46.083Z"}

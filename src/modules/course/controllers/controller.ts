@@ -5,6 +5,7 @@ import { ServiceError } from "@grpc/grpc-js";
 import { StatusCode } from "../../../interface/enums";
 import { UserClient } from "../../../config/grpc-client/userClient";
 import { TutorClient } from "../../../config/grpc-client/tutorClient";
+import { ChatClient } from "../../../config/grpc-client/chatClient";
 
 
 // Configure multer for file handling
@@ -68,14 +69,14 @@ export default class CourseController {
             return res.status(400).send('No file uploaded');
           }
           // Check if image name is provided
-          if (!req.file.originalname) {
+          if (!req.file.originalname) { 
             return res.status(400).send('Image name is required');
           }
           // Prepare data for gRPC request
           const data = {
             imageBinary: req.file.buffer,
             imageName: req.file.originalname,
-          };
+          }; 
           console.log(data, 'datajj')
           // Call gRPC service
           CourseClient.UploadImage(data, (err: ServiceError | null, result: any) => {
@@ -117,7 +118,8 @@ export default class CourseController {
           console.log(result); 
           if(result.success){
 
-            const courseId = result.courseId;
+            const {courseId, courseTitle, thumbnail} = result
+          
             const data = {
               tutorId ,
               courseId 
@@ -133,8 +135,8 @@ export default class CourseController {
                   }
                   res.status(200).json(response);
                 })
-              }
-              if(!tutorResult.success){ // Rollbacking if not success
+              }   
+              if(!tutorResult.success){ // Rollbacking if not success 
                 console.log('tutor update was not success');
                 const data = {
                   courseId
@@ -146,9 +148,15 @@ export default class CourseController {
                   }
                   res.status(200).json(response);
                 })
-              }
+              } 
+              console.log(courseId, 'courseId')
+              ChatClient.CreateChatRoom({courseId,courseName:courseTitle,thumbnail,tutorId}, (err:Error|null, ChatRoomResult:any)=>{
+                console.log(ChatRoomResult, 'created chatroom')
+              })
               res.status(200).json(result);
             });
+          }else{
+            res.status(200).json(result);
           }
           
         }) 
@@ -170,13 +178,13 @@ export default class CourseController {
       } 
 
       FetchCourse(req:Request, res:Response, next: NextFunction) {
-        console.log('trig') 
+        console.log('trig23') 
         CourseClient.FetchCourse(req.body, (err: ServiceError | null, result: any) => {
           if(err){
             console.error("gRPC error:", err);
             return res.status(500).send("Error from gRPC service:" + err.message);
           }
- 
+          console.log(result)
           res.status(200).json(result);
         })
       } 

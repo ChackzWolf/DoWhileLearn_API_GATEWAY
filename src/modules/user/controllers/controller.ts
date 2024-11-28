@@ -4,7 +4,6 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import { PaymentClient } from "../../../config/grpc-client/paymentClient";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
-import { Service } from "ts-node";
 
 
 export default class UserController {  
@@ -179,7 +178,7 @@ export default class UserController {
             console.log('dont have userId: ' , userId);
             res.status(StatusCode.OK).json({courseData,inCart:false});
           }
-        })
+        }) 
     } 
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
         UserClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
