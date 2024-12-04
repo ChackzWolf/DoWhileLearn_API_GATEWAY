@@ -11,6 +11,8 @@ interface AuthenticatedSocket extends Socket {
     courseIds?: string[];
 }
 
+export let globalIO :Server| null = null
+
 // Express and Socket.IO Setup
 export const setupSocket = (server: any) => {
     const io = new Server(server, {
@@ -39,7 +41,7 @@ export const setupSocket = (server: any) => {
                     if (err) {
                         return next(new Error('Authentication failed'));
                     }
-
+ 
                     socket.courseIds = response.courses.map((course: any) => course._id)
                     console.log(socket.courseIds, 'courseIds')
                     next();
@@ -57,6 +59,18 @@ export const setupSocket = (server: any) => {
     io.on('connection', (socket: AuthenticatedSocket) => {
         console.log('New client connected', socket.userId);
 
+        socket.on('track_upload', (sessionId) => {
+            socket.join(`upload_${sessionId}`);
+        });
+
+
+
+
+
+
+
+
+
 
         socket.on("get_chat_rooms", (userId,callback)=> {
             console.log('trigered chat rooms',userId)
@@ -66,6 +80,13 @@ export const setupSocket = (server: any) => {
                 callback(chatRooms);
                 socket.emit("chat_rooms", chatRooms);
             })
+
+            socket.on('track_video_upload', (sessionId) => {
+                // Verify user's right to upload
+                if (socket.userId) {
+                  socket.join(`upload_${sessionId}`);
+                }
+            });
         }) 
 
         // Join Course Room
@@ -168,6 +189,7 @@ export const setupSocket = (server: any) => {
     const generateUniqueId = (): string => {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     };
+    globalIO = io;
     return io;
 }
     )}
