@@ -21,6 +21,15 @@ service UserService {
     rpc AttachNameToReview(AttachNameToReviewRequest) returns (AttachNameToReviewResponse);
     rpc AttachNameToMessages(ChatRoomData) returns (ChatRoomData);
     rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse);
+    rpc FetchUsersByIds( FetchUsersByIdsRequest) returns (FetchUsersByIdsResponse);
+}
+
+message FetchUsersByIdsRequest {
+    repeated string studentIds = 1;
+}
+
+message FetchUsersByIdsResponse {
+    repeated UserData users = 1;
 }
 
 

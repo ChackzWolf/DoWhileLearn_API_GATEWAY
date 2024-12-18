@@ -6,6 +6,8 @@ import { CourseClient } from "../../../config/grpc-client/courseClient";
 import createToken from "../../../utils/tokenActivation"
 import { OrderClient } from "../../../config/grpc-client/orderClient";
 import multer from "multer";
+import { UserClient } from "../../../config/grpc-client/userClient";
+import { addStudents } from './../../order/controllers/use.case';
 
 const imageStorage = multer.memoryStorage(); // Store file in memory for image
 const pdfStorage = multer.memoryStorage(); // Store PDF file in memory
@@ -197,7 +199,7 @@ export default class TutorController {
     } 
 
     fetchTutorCourse(req:Request, res:Response, next: NextFunction) {
-        console.log('trig')
+        console.log('trig fetching course')
         const tutorId = req.query.tutorId as string;
         CourseClient.FetchTutorCourse({tutorId}, (err: ServiceError | null, result: any) => {
           if(err){
@@ -206,6 +208,29 @@ export default class TutorController {
           }
 
           res.status(StatusCode.OK).json(result);
+        })
+    }   
+
+    fetchStudents(req:Request, res:Response, next: NextFunction){
+        console.log('trig fetching students');
+        const tutorId = req.query.tutorId as string;
+        TutorClient.FetchTutorStudents({tutorId}, (err: ServiceError | null, result :any)=> {
+            if(err){
+                console.error("gRPC error:", err);
+                return res.status(500).send("Error from gRPC service:" + err.message);
+            }
+            if(result.success && result.studentIds){
+                console.log(result);
+                UserClient.FetchUsersByIds({studentIds:result.studentIds}, (err: ServiceError | null, result: any)=> {
+                    if(err){
+                        console.error("gRPC error user service:", err);
+                        return res.status(500).send("Error from gRPC service user service:" + err.message);
+                    }
+                    console.log(result, 'fetched users by Ids')
+                    res.status(StatusCode.OK).json(result);
+                } )
+
+            }
         })
     }
 

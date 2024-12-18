@@ -24,6 +24,7 @@ tutorRoute.post("/updateTutorDetails", controller.updateTutorDetails);
 tutorRoute.get("/fetchTutorDetails",middleware.checkTutorBlocked, controller.fetchTutorDetails)
 tutorRoute.get("/fetchTutorCourse",middleware.checkTutorBlocked,controller.fetchTutorCourse)
 tutorRoute.get("/fetchOrdersOfTutor",middleware.checkTutorBlocked, controller.fetchOrdersOfTutor)
+tutorRoute.get("/FetchStudents", middleware.checkTutorBlocked, controller.fetchStudents)
 
 
 

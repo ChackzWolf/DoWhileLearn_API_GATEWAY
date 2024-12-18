@@ -59,10 +59,23 @@ export const setupSocket = (server: any) => {
     io.on('connection', (socket: AuthenticatedSocket) => {
         console.log('New client connected', socket.userId);
 
+
+
+        
         socket.on('track_upload', (sessionId) => {
-            socket.join(`upload_${sessionId}`);
+            socket.join(`${sessionId}`);
+            console.log(`lets see = ${sessionId}`)
+            console.log('joined track_upload socket', socket.userId)
         });
 
+        socket.on('track_video_upload', (sessionId) => {
+            console.log('/////////////////////////////1')
+            // Verify user's right to upload
+            if (socket.userId) {
+              socket.join(`upload_${sessionId}`);
+              console.log('joined track_video_upload', socket.userId);
+            }
+        });
 
 
 
@@ -81,12 +94,7 @@ export const setupSocket = (server: any) => {
                 socket.emit("chat_rooms", chatRooms);
             })
 
-            socket.on('track_video_upload', (sessionId) => {
-                // Verify user's right to upload
-                if (socket.userId) {
-                  socket.join(`upload_${sessionId}`);
-                }
-            });
+
         }) 
 
         // Join Course Room

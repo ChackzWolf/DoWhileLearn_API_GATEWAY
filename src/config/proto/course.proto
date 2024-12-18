@@ -6,7 +6,7 @@ service CourseService {
   rpc SubmitCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
   rpc DeleteCourse(DeleteCourseRequest) returns (DeleteCourseResponse);
   rpc EditCourse(SubmitCourseRequest) returns (SubmitCourseResponse);
-  rpc FetchCourse(emptyRequest) returns (ResponseFetchCourseList);
+  rpc FetchCourse(Filters) returns (ResponseFetchCourseList);
   rpc FetchTutorCourse(RequestFetchTutorCourse) returns (ResponseFetchCourseList);
   rpc FetchCourseDetails(RequestFetchCourseDetails) returns (ResponseFetchCourse);
   rpc AddPurchasedUsers(AddPurchasedUsersRequest) returns (AddPurchasedUsersResponse);
@@ -14,6 +14,12 @@ service CourseService {
   rpc AddReview(ReviewData) returns (AddReviewResponse);
   rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
   rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourseList);
+}
+
+message Filters {
+  string category = 1;
+  string priceOrder = 2;
+  string ratingOrder = 3;
 }
 
 message FetchPurchasedCourseRequest {
