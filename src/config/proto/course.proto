@@ -10,7 +10,7 @@ service CourseService {
   rpc FetchTutorCourse(RequestFetchTutorCourse) returns (ResponseFetchCourseList);
   rpc FetchCourseDetails(RequestFetchCourseDetails) returns (ResponseFetchCourse);
   rpc AddPurchasedUsers(AddPurchasedUsersRequest) returns (AddPurchasedUsersResponse);
-  rpc GetCourseInCart(GetCourseInCartRequest) returns (ResponseFetchCourseList);
+  rpc GetCourseByIds(GetCourseInCartRequest) returns (ResponseFetchCourseList);
   rpc AddReview(ReviewData) returns (AddReviewResponse);
   rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
   rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourseList);

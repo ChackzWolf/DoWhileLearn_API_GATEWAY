@@ -22,6 +22,17 @@ service UserService {
     rpc AttachNameToMessages(ChatRoomData) returns (ChatRoomData);
     rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse);
     rpc FetchUsersByIds( FetchUsersByIdsRequest) returns (FetchUsersByIdsResponse);
+    rpc UpdateUserDetails(UpdateUserDetailsRequest) returns(UpdateUserDetailsResponse);
+}
+
+message UpdateUserDetailsRequest {
+    UserData formData = 1;
+}
+
+message UpdateUserDetailsResponse {
+    string message = 1;
+    bool success = 2;
+    int32 status = 3;
 }
 
 message FetchUsersByIdsRequest {
@@ -188,7 +199,10 @@ message UserData {
     google.protobuf.Timestamp createdAt = 9;
     google.protobuf.Timestamp updatedAt =10;
     string _id = 11;
-
+    string userId = 12;
+    string profilePicture = 13;
+    string bio = 14;
+    string phoneNumber = 15;
 }
 
 
@@ -208,13 +222,6 @@ message OTPResponse {
     string _id = 7;
 }
 
-message useData {
-    string firstName = 1;
-    string lastName = 2;
-    string email = 3;
-    string password = 4;
-    string _id = 5;
-}
 
 message LoginRequest {
     string email = 1;
@@ -228,6 +235,7 @@ message LoginResponse {
     string message = 4;
     int32 status = 5;
     string userId = 6;
+    UserData userData = 7;
 }
 
 message ReviewData {

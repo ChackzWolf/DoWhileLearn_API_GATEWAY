@@ -5,6 +5,7 @@ import { StatusCode } from "../../../interface/enums";
 import createToken from "../../../utils/tokenActivation";
 import { UserClient } from "../../../config/grpc-client/userClient";
 import { TutorClient } from "../../../config/grpc-client/tutorClient";
+import { OrderClient } from "../../../config/grpc-client/orderClient";
 
 
 
@@ -65,13 +66,20 @@ export default class AdminController {
 
     ToggleBlockStudent(req:Request, res: Response, nest: NextFunction){
         UserClient.ToggleBlock(req.body, (err:ServiceError | null, result:any)=> { 
-
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             res.status(StatusCode.Accepted).send(result);
         })
     }
 
     ToggleBlockTutor(req:Request, res: Response, nest: NextFunction){
         TutorClient.ToggleBlock(req.body, (err:ServiceError | null, result:any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             res.status(StatusCode.Accepted).send(result);
         })
     }
@@ -79,19 +87,42 @@ export default class AdminController {
     FetchStudentData (req:Request, res:Response, next:NextFunction){
         console.log('triggerd fetsh students')
         UserClient.FetchStudentData(req.body, (err:ServiceError | null , result: any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             res.status(StatusCode.Created).send(result);
+        })
+    }
+
+    fetchAllOrders(req:Request, res:Response, next: NextFunction){
+        console.log('trigered fertch aall orders admin');
+        OrderClient.FetchAllOrders({}, (err:ServiceError | null, result:any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
+            res.status(StatusCode.Accepted).send(result);
         })
     }
 
     FetchTutorData(req:Request, res: Response, next: NextFunction){
         console.log('trig fetch tutor')
         TutorClient.FetchTutorData(req.body, (err:ServiceError | null, result:any) => {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             res.status(StatusCode.Accepted).send(result)
         })
     }
 
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
         AdminClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })
@@ -100,6 +131,10 @@ export default class AdminController {
     resetPasswordOTP(req: Request, res: Response, next: NextFunction){ 
         console.log('trig')
         AdminClient.VerifyOTPResetPassword(req.body, (err:ServiceError | null, result: any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             console.log(result)
             res.status(StatusCode.OK).json(result);
         });
@@ -108,6 +143,10 @@ export default class AdminController {
     resetPassword(req: Request, res: Response, next: NextFunction){
         console.log(req.body,'trig')
         AdminClient.ResetPassword(req.body,(err:ServiceError | null, result:any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })
@@ -115,6 +154,10 @@ export default class AdminController {
     resendPasswordOTP(req:Request, res: Response, next: NextFunction) {
         console.log(req.body, 'trig from resend otp');
         AdminClient.ResendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            if(err){
+                res.status(500).send(err.message);  
+                return
+            }
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })

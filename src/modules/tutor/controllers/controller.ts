@@ -190,13 +190,13 @@ export default class TutorController {
                     }
 
                     console.log('reached her')
-                    return res.status(StatusCode.Created).json({ success: false, message: "Login failed. Invalid credentials." });
+                    return res.status(StatusCode.Created).json({ success: false, message: "Login failed. Invalid credentials.",tutorData });
             
                 }
             }
             
         })
-    } 
+    }  
 
     fetchTutorCourse(req:Request, res:Response, next: NextFunction) {
         console.log('trig fetching course')
@@ -282,6 +282,7 @@ export default class TutorController {
 
     resendPasswordOTP(req:Request, res: Response, next: NextFunction) {
         console.log(req.body, 'trig from resend otp');
+        
         TutorClient.ResendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
             console.log(result)
             res.status(StatusCode.OK).json(result);
@@ -289,7 +290,12 @@ export default class TutorController {
     }
 
     updateTutorDetails(req:Request, res: Response, next:NextFunction){
-        TutorClient.UpdateTutorDetails(req.body, (err:ServiceError | null, result: any)=> {
+        console.log(req.body, 'this is req.bvody')
+        const formData = req.body;
+        TutorClient.UpdateTutorDetails({formData}, (err:ServiceError | null, result: any)=> {
+            if(err){
+                console.log(err)
+            }
             console.log(result);
             res.status(StatusCode.OK).json(result);
         })

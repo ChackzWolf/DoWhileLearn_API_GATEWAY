@@ -58,22 +58,13 @@ export default class UserController {
             }
             console.log(result, 'result form user') 
             if (result && result.success) {
-                const { message, success, accessToken, refreshToken, userId } = result;
+                const { message, success, accessToken, refreshToken, userId, userData } = result;
                 console.log(result)
                 if (success && refreshToken && accessToken) {
-                    // // Set HttpOnly cookies for access and refresh tokens
-                    // res.cookie('accessToken', accessToken, {
-                    //     httpOnly: true,
-                    //     secure: true,  // Only send over HTTPS in production
-                    //     sameSite: 'strict' // Helps mitigate CSRF attacks
-                    // });
     
                     res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
-
-                    return res.status(201).json({ message, success, userId , accessToken, refreshToken});
+                    return res.status(201).json({ message, success, userId , accessToken, refreshToken, userData});
                 } else {
-                    console.log('triggered else')
-                    // Handle cases where tokens are missing or invalid
                     return res.status(201).json({ success: false, message: result.message });
                 }
             } else {
@@ -118,7 +109,7 @@ export default class UserController {
             console.log(GetIdsResult, 'thsi is ersult for m  Getcartitems');
             const {success, courseIds} = GetIdsResult
             if(success){
-                CourseClient.GetCourseInCart({courseIds}, (err: ServiceError | null, result: any) => {
+                CourseClient.GetCourseByIds({courseIds}, (err: ServiceError | null, result: any) => {
                     if(err){
                         console.error("gRPC error:", err);
                         return res.status(500).send("Error from gRPC service:" + err.message);
@@ -146,6 +137,41 @@ export default class UserController {
         });
         console.log(req.cookies.refreshToken,'removed cookie')
         res.status(200).send({message:'Logged out',success:true});
+    }
+
+    fetchUserDetails(req:Request, res:Response, next: NextFunction){
+        try {
+
+            console.log(req.params, 'req.parama')
+            const {userId} = req.query
+            UserClient.GetUserDetails({ userId: userId }, (err:ServiceError | null , result:any)=> {
+                if(err){
+                    console.log(err)
+                    return res.status(500).send("Error from grpc servcie:"+ err.message);
+                }
+                console.log(result, 'result from fetching')
+                res.status(StatusCode.OK).json({result});
+
+            })
+        } catch (error) {
+            
+        } 
+    }
+
+    updateUserDetails(req:Request, res:Response, next: NextFunction){
+        try {
+            const formData = req.body; 
+            console.log(formData, ' this is form data for user details update')
+            UserClient.UpdateUserDetails({formData}, (err:ServiceError | null, result: any)=> {
+                if(err){
+                    console.log(err)
+                }
+                console.log(result);
+                res.status(StatusCode.OK).json(result);
+            })
+        } catch (error) {
+
+        }
     }
 
     fetchCourseDetails(req:Request, res:Response, next: NextFunction){

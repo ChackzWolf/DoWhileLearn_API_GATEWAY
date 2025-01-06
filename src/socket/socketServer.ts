@@ -115,8 +115,8 @@ export const setupSocket = (server: any) => {
                 console.log(result, 'result fetching messages');
                 if (result) {
                     io.emit('course_messages', result.messages);
-                }
-            })
+                } 
+            }) 
         });
 
         // Send Message

@@ -11,7 +11,7 @@ const uploadVideo = multer({ storage: videoStorage }).single('videoBinary'); // 
 
 const authController = new AuthController()
 const isAuth = authController.isAuthenticated
-const controller = new CourseController();
+const controller = new CourseController(); 
  
 courseRoute.post("/upload", controller.UploadVideo);
 courseRoute.post("/imageUpload", controller.UploadImage);
@@ -20,5 +20,6 @@ courseRoute.post("/editCourse", controller.EditCourseDetails)
 
 courseRoute.get("/fetchCourse" ,controller.FetchCourse);
 courseRoute.get("/fetchCourseDetails", controller.FetchCourseDetails)
+courseRoute.get("/fetchCoursesByIds", controller.fetchCoursesByIds)
 
 export default courseRoute;

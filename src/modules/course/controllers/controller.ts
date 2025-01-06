@@ -276,8 +276,22 @@ export default class CourseController {
         }) 
       } 
 
+      fetchCoursesByIds(req:Request, res:Response, next: NextFunction) {
+        const ids = req.query.ids;
+        // const courseIds = Array.isArray(ids) ? ids : ids.split(',');
+        console.log(ids, 'pruchased courses ids')
+        CourseClient.GetCourseByIds({courseIds:ids}, (err: ServiceError | null, result: any) => {
+          if(err){
+              console.error("gRPC error:", err);
+              return res.status(500).send("Error from gRPC service:" + err.message);
+          }
+          console.log(result)
+          res.status(StatusCode.OK).send(result);
+      });
+      }
+
       FetchCourseDetails(req:Request, res:Response, next: NextFunction){
-        console.log('trig25')
+        console.log('trig25'  ,req.query)
         const id = req.query.id as string; 
         const userId = req.query.userId as string;
 
@@ -289,28 +303,40 @@ export default class CourseController {
           const courseData = result;
           console.log(JSON.stringify(courseData, null, 2))
           console.log(result)
-          if(userId){
-            console.log('have userId:' , userId);
-            const data = {
-              userId,
-              courseId:id  
-            } 
 
-            UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
-              console.log(result, 'course status')
-              res.status(StatusCode.OK).json({courseData,courseStatus:result});
-            })
-          }else{
-            console.log('dont have userId ')
-            const courseStatus = {
-              inCart:false,
-              inPurchase:false,
-              inWishList:false
+          TutorClient.FetchTutorDetails({tutorId: result.tutorId}, (err:ServiceError | null, tutorDetails: any)=> {
+            if(err){
+              console.log(err);
+              return res.status(500).send("Error from grpc tutor service: " + err.message);
             }
-            console.log(courseStatus);
+
+
+            if(userId){
+              console.log('have userId:' , userId);
+              const data = {
+                userId,
+                courseId:id  
+              } 
+  
+              UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
+                console.log(result, 'course status')
+                res.status(StatusCode.OK).json({courseData,courseStatus:result,tutorData:tutorDetails.tutorData});
+              })
+            }else{
+              console.log('dont have userId ')
+              const courseStatus = {
+                inCart:false,
+                inPurchase:false,
+                inWishList:false
+              }
+              console.log(courseStatus);
+              
+              res.status(StatusCode.OK).json({courseData,courseStatus,tutorData:tutorDetails.tutorData});
+            }
             
-            res.status(StatusCode.OK).json({courseData,courseStatus});
-          }
+          })
+
+
           
         })
       }

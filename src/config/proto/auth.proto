@@ -6,9 +6,11 @@ service AuthService {
 }
 
 message IsAuthenticatedRequest {
-    string token = 1;
+    string accessToken = 1;
     string refreshToken = 2;
+    string role = 3;
 }
+
 
 message IsAuthenticatedResponse {
     string message = 1;
