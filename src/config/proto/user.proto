@@ -23,6 +23,23 @@ service UserService {
     rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse);
     rpc FetchUsersByIds( FetchUsersByIdsRequest) returns (FetchUsersByIdsResponse);
     rpc UpdateUserDetails(UpdateUserDetailsRequest) returns(UpdateUserDetailsResponse);
+    rpc GoogleAuthentication(GoogleAuthenticationRequest) returns(GoogleAuthenticationResponse);
+}
+
+message GoogleAuthenticationRequest{
+    string firstName = 1;
+    string lastName = 2;
+    string email = 3;
+    string photoUrl = 4;
+}
+
+message GoogleAuthenticationResponse{
+    bool success = 1;
+    string message = 2;
+    string refreshToken = 3;
+    string accessToken = 4;
+    string userId = 5;
+    UserData userData = 6;
 }
 
 message UpdateUserDetailsRequest {

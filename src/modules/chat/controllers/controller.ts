@@ -3,10 +3,10 @@ import axios from "axios";
 import { Request, Response } from "express";
 import { ServiceError } from "@grpc/grpc-js";
 import { CourseClient } from "../../../config/grpc-client/courseClient"; 
-// Service URLs
+// Service URLs 
 const CHAT_SERVICE_URL = "http://chat-service:4000"; // Replace with your Chat Service's URL
 
-
+ 
 export default class ChatController {
     public listCourses = async (req:Request, res:Response) => {
         try {

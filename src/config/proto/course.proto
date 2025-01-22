@@ -113,6 +113,7 @@ message ResponseFetchCourse {
   string tutorId = 12;
   int32 averageRating = 13;
   int32 ratingCount = 14;
+  repeated string purchasedUsers = 15;
 }
 
 

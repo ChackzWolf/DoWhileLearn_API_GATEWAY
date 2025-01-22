@@ -4,6 +4,7 @@ import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
 import { StatusCode } from "../../../interface/enums";
 import { PaymentClient } from "../../../config/grpc-client/paymentClient";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
+import { TutorClient } from "../../../config/grpc-client/tutorClient";
 
 
 export default class UserController {  
@@ -48,6 +49,39 @@ export default class UserController {
             }
         }) 
     }
+    
+    userGoogleAuth(req: Request, res: Response, next: NextFunction){
+        try {
+            UserClient.GoogleAuthentication(req.body, (err:ServiceError | null, result: any)=> {
+                if(err){
+                    console.error("Google auth error")
+                    return res.status(500).send({ success: false, message: "Internal server error" });
+                }
+
+                if (result && result.success) {
+                    console.log(result, 'result form user') 
+
+                    const { message, success, accessToken, refreshToken, userId, userData } = result;
+                    console.log(result)
+                    if (success && refreshToken && accessToken) {
+        
+                        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+                        return res.status(201).json({ message, success, userId , accessToken, refreshToken, userData});
+                    } else {
+                        return res.status(201).json({ success: false, message: result.message });
+                    }
+                } else {
+                    if(result.message === 'isBlocked'){
+                        return res.status(403).json({ message: 'user blocked' });
+                    }
+                    return res.status(StatusCode.NotAcceptable).json({ success: false, message: result.message });
+                } 
+            })
+        } catch (error) {
+            
+        }
+    }
+
 
     userLogin(req: Request, res: Response, next: NextFunction) { 
         console.log('trig user login')
@@ -189,21 +223,55 @@ export default class UserController {
           console.log('Raw course data structure:', Object.keys(courseData));
 
           console.log(result)
-          if(userId){
-            console.log('have user id:', userId);
-            const data = {
-              userId,
-              courseId:id
+
+          TutorClient.FetchTutorDetails({tutorId: result.tutorId}, (err:ServiceError | null, tutorDetails: any)=> {
+            if(err){
+              console.log(err);
+              return res.status(500).send("Error from grpc tutor service: " + err.message);
             }
 
-            UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => { 
-              console.log(result, 'course status')
-              res.status(StatusCode.OK).json({courseData,courseStatus:result});
-            })
-          }else{
-            console.log('dont have userId: ' , userId);
-            res.status(StatusCode.OK).json({courseData,inCart:false});
-          }
+
+            if(userId){
+              console.log('have userId:' , userId);
+              const data = {
+                userId,
+                courseId:id  
+              } 
+  
+              UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => {
+                console.log(result, 'course status')
+                res.status(StatusCode.OK).json({courseData,courseStatus:result,tutorData:tutorDetails.tutorData});
+              })
+            }else{
+              console.log('dont have userId ')
+              const courseStatus = {
+                inCart:false,
+                inPurchase:false,
+                inWishList:false
+              }
+              console.log(courseStatus);
+              
+              res.status(StatusCode.OK).json({courseData,courseStatus,tutorData:tutorDetails.tutorData});
+            }
+            
+          })
+
+
+        //   if(userId){
+        //     console.log('have user id:', userId);
+        //     const data = {
+        //       userId,
+        //       courseId:id
+        //     }
+
+        //     UserClient.CourseStatus(data, (err:ServiceError | null, result: any) => { 
+        //       console.log(result, 'course status')
+        //       res.status(StatusCode.OK).json({courseData,courseStatus:result});
+        //     })
+        //   }else{
+        //     console.log('dont have userId: ' , userId);
+        //     res.status(StatusCode.OK).json({courseData,inCart:false});
+        //   }
         }) 
     } 
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){

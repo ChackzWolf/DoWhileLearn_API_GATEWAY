@@ -13,7 +13,7 @@ const middlware = new isAuthenticated();
 app.use(cookieParser());
 
 userRoute.post("/register", controller.register);
-userRoute.post('/verifyOTP', controller.verifyOtp);
+userRoute.post('/verifyOTP', controller.verifyOtp);  
 userRoute.post('/resendOTP', controller.resendOtp);
 userRoute.post("/login", controller.userLogin);
 userRoute.post("/addToCart",middlware.checkUserBlocked, controller.addToCart);
@@ -28,9 +28,9 @@ userRoute.post('/updateUserDetails', controller.updateUserDetails)
 
 userRoute.get('/fetchReviewsOfCourse', controller.fetchReviewsOfCourse);
 userRoute.get("/getCartItems",middlware.checkUserBlocked, controller.getCartItems)
-userRoute.get("/fetchCourseDetails",middlware.checkUserBlocked, controller.fetchCourseDetails)
+userRoute.get("/fetchCourseDetails" , controller.fetchCourseDetails)
 userRoute.get("/fetchPurchasedCourses", middlware.checkUserBlocked, controller.fetchPurchasedCourses)
-userRoute.get("/fetchUserData" , controller.fetchUserDetails)
+userRoute.get("/fetchUserData" , controller.fetchUserDetails);
 
 
 

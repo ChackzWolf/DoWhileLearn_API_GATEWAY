@@ -20,7 +20,7 @@ export const setupSocket = (server: any) => {
             origin: 'http://localhost:5173', // Frontend URL
             methods: ['GET', 'POST']
         }
-    });
+    }); 
 
     // JWT Secret (store in environment variable)
     const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your_jwt_secret';
@@ -33,7 +33,7 @@ export const setupSocket = (server: any) => {
         try {
             const decoded: any = jwt.verify(token, REFRESH_TOKEN_SECRET);
             console.log('token check :', decoded)
-            socket.userId = decoded.id;
+            socket.userId = decoded.id; 
 
             // Fetch user's purchased courses via gRPC
             CourseClient.FetchPurchasedCourses({ userId: decoded.id },
@@ -78,26 +78,23 @@ export const setupSocket = (server: any) => {
         });
 
 
-
-
-
-
-
-
-
         socket.on("get_chat_rooms", (userId,callback)=> {
             console.log('trigered chat rooms',userId)
             ChatClient.GetUserChatRooms(userId, (err:Error | null, chatRooms:any)=>{
-                console.log(chatRooms,'chat rooms')
+
+                if(err){
+                    console.log(err, 'error fetching chat rooms')
+                }
+
                 console.log('calling back chat rooms', chatRooms)
                 callback(chatRooms);
                 socket.emit("chat_rooms", chatRooms);
             })
 
 
-        }) 
+        })  
 
-        // Join Course Room
+        // Join Course Room 
         socket.on('join_course_room', ({ courseId,userId }) => {
             // Verify user is authorized for this course
             if (socket.courseIds?.includes(courseId)) { 
@@ -107,11 +104,15 @@ export const setupSocket = (server: any) => {
             const data = {
                 courseId,
                 userId,
-                limit: 100,
+                limit: 100, 
                 before: '', 
             }
-
+            console.log(data, 'this is data to fetch messages')
             ChatClient.getMessages(data, (err: Error | null, result: any) => {
+                if(err){
+                    console.log(err, 'error fetching messages')
+                    return
+                }
                 console.log(result, 'result fetching messages');
                 if (result) {
                     io.emit('course_messages', result.messages);

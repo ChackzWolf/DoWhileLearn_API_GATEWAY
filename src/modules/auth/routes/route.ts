@@ -11,10 +11,9 @@ const controller = new AuthController();
 const middleware = new isAuthenticated();
 app.use(cookieParser());
 authRoute.post("/isAuth", controller.isAuthenticated);
-authRoute.post('/user-refresh-token', middleware.checkUserBlocked , controller.userRefreshToken);
+authRoute.post('/user-refresh-token', controller.userRefreshToken);
 authRoute.post('/admin-refresh-token', controller.adminRefreshToken);
 authRoute.post('/tutor-refresh-token', controller.tutorRefreshToken);
-authRoute.post('/clearUserCookies', controller.clearUserCookies)
-
+authRoute.post('/clearUserCookies', controller.clearUserCookies);
 
 export default authRoute; 

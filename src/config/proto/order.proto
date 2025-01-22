@@ -35,7 +35,7 @@ message Order {
   string price = 7;
   string adminShare = 8;       
   string tutorShare = 9;       
-  google.protobuf.Timestamp createdAt = 10;  
+  string createdAt = 10;  
   bool paymentStatus = 11;      
   string sessionId = 12;         
   map<string, string> metadata = 13;  

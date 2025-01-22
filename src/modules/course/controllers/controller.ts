@@ -289,7 +289,7 @@ export default class CourseController {
           res.status(StatusCode.OK).send(result);
       });
       }
-
+ 
       FetchCourseDetails(req:Request, res:Response, next: NextFunction){
         console.log('trig25'  ,req.query)
         const id = req.query.id as string; 
@@ -302,7 +302,7 @@ export default class CourseController {
           }
           const courseData = result;
           console.log(JSON.stringify(courseData, null, 2))
-          console.log(result)
+          console.log(result, ' this is course details , 3183')
 
           TutorClient.FetchTutorDetails({tutorId: result.tutorId}, (err:ServiceError | null, tutorDetails: any)=> {
             if(err){

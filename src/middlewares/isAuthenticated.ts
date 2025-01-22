@@ -73,9 +73,9 @@ export class isAuthenticated {
             accessToken: tutorAccessToken,
             role:'TUTOR'
         }
-
+        console.log(data, 'datat from tutor')
         AuthClient.IsAuthenticated(data, (err: ServiceError | null, result: any) => {
-            console.log('triggered api tutor')
+            console.log('triggered api tutor', result)
             if (err) {
                 console.error(err, 'auth check faild');
                 res.status(500).send(err.message);
@@ -92,9 +92,6 @@ export class isAuthenticated {
             if (!tutorId) {
                 return res.status(401).json({ message: 'User ID is missing' });
             }
-    
-    
-            
     
             TutorClient.isBlocked({ tutorId }, (err: ServiceError | null, result: any) => {
                 if (err) {
@@ -130,7 +127,7 @@ export class isAuthenticated {
         }
         console.log('trigered here', data);
         AuthClient.IsAuthenticated(data, (err: ServiceError | null, result: any) => {
-            console.log('triggered api tutor')
+            console.log('triggered api admin')
             if (err) {
                 console.error(err, 'auth check faild');
                 res.status(500).send(err.message);
