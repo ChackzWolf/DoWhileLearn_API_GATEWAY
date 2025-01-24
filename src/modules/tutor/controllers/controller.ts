@@ -119,7 +119,40 @@ export default class TutorController {
         });
     }
 
+    tutorGoogleAuth(req: Request, res: Response, next: NextFunction){
+        try {
+            console.log(req.body, 'google auth service request')
+            TutorClient.GoogleAuth(req.body, (err:ServiceError | null, result: any)=> {
+                if(err){
+                    console.error("Google auth error")
+                    return res.status(500).send({ success: false, message: "Internal server error" });
+                }
+                if (result && result.success) {
+                    console.log(result, 'result form tutor') 
 
+                    const { message, success, accessToken, refreshToken, tutorId, tutorData, type } = result;
+                    console.log(result)
+                    if (success && refreshToken && accessToken) {
+        
+                        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+                        return res.status(201).json({ message, success, tutorId,type , accessToken, refreshToken, tutorData});
+                    } else {
+                        return res.status(201).json({ success: false, message: result.message });
+                    }
+                } else {
+                    if(result.message === 'isBlocked'){
+                        return res.status(403).json({ message: 'tutor blocked' });
+                    }
+                    return res.status(StatusCode.NotAcceptable).json({ success: false, message: result.message });
+                } 
+            })
+        } catch (error) {
+            throw error
+        }
+    }
+
+
+    
     register(req: Request, res: Response, next: NextFunction) {
         TutorClient.Register(req.body, (err: ServiceError | null, result: any) => {
             console.log('triggered api tutor')

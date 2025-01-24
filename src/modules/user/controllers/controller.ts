@@ -52,6 +52,7 @@ export default class UserController {
     
     userGoogleAuth(req: Request, res: Response, next: NextFunction){
         try {
+            console.log(req.body, 'google auth service request')
             UserClient.GoogleAuthentication(req.body, (err:ServiceError | null, result: any)=> {
                 if(err){
                     console.error("Google auth error")

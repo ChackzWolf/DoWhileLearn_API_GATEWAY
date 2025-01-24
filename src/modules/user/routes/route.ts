@@ -24,6 +24,7 @@ userRoute.post("/resetPasswordOTP",controller.resetPasswordOTP)
 userRoute.post("/updatePassword",controller.resetPassword)
 userRoute.post('/addUserReview', controller.addReview);
 userRoute.post('/updateUserDetails', controller.updateUserDetails)
+userRoute.post('/googleAuth', controller.userGoogleAuth)
 
 
 userRoute.get('/fetchReviewsOfCourse', controller.fetchReviewsOfCourse);

@@ -20,6 +20,7 @@ tutorRoute.post("/uploadPDF", controller.UploadPDF);
 tutorRoute.post("/registerDetails", controller.registerDetails);
 tutorRoute.post("/resendOtpToEmail", controller.resendPasswordOTP);
 tutorRoute.post("/updateTutorDetails", controller.updateTutorDetails);
+tutorRoute.post("/googleAuth", controller.tutorGoogleAuth)
 
 tutorRoute.get("/fetchTutorDetails", controller.fetchTutorDetails)
 tutorRoute.get("/fetchTutorCourse",middleware.checkTutorBlocked,controller.fetchTutorCourse)
