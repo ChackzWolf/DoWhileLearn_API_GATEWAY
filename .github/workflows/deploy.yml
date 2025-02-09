@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Connect to Kubernetes cluster
-        run: doctl kubernetes cluster kubeconfig save dowhilelearn
+        run: doctl kubernetes cluster kubeconfig save dowhilelearn-cluster
 
       - name: Update Kubernetes deployment
         run: |
