@@ -340,13 +340,17 @@ export default class UserController {
         })
     }
     
-    test(req:Request, res:Response, _next:NextFunction){
+    test(_req:Request, res:Response, _next:NextFunction){
         UserClient.Test(null,(err:ServiceError | null, result:any)=> {
+            if(err){
+                res.send(err)
+            }
             console.log(result.success)
             if(result.success){
                 res.send("User service connected")
+                return
             }
-            res.status(StatusCode.OK).json(result);
+            res.send("User service not connected")
         })
     }
      
