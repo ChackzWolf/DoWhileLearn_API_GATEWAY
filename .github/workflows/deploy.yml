@@ -27,3 +27,16 @@ jobs:
           context: .
           push: true
           tags: jacksoncheriyan05/api-gateway:${{ steps.vars.outputs.sha_short }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+        
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Update Kubernetes deployment
+        run: |
+          kubectl set image deployment/api-gateway api-gateway=jacksoncheriyan05/api-gateway:${{ steps.vars.outputs.sha_short }} -n dowhilelearn
