@@ -24,8 +24,14 @@ service UserService {
     rpc FetchUsersByIds( FetchUsersByIdsRequest) returns (FetchUsersByIdsResponse);
     rpc UpdateUserDetails(UpdateUserDetailsRequest) returns(UpdateUserDetailsResponse);
     rpc GoogleAuthentication(GoogleAuthenticationRequest) returns(GoogleAuthenticationResponse);
+    rpc Test(emptyRequest) returns (TestResponse);
 }
 
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
+}
 message GoogleAuthenticationRequest{
     string firstName = 1;
     string lastName = 2;
