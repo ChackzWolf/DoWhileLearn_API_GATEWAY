@@ -20,6 +20,13 @@ service TutorService {
     rpc FetchTutorDetails(FetchTutorDetailsRequest) returns (FetchTutorDetailsResponse);
     rpc UpdateTutorDetails(UpdateTutorDetailsRequest) returns(UpdateTutorDetailsResponse);
     rpc FetchTutorStudents(FetchStudentsRequest) returns(FetchStudentsResponse);
+    rpc Test(emptyRequest) returns (TestResponse);
+}
+
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
 }
 
 message GoogleAuthRequest {

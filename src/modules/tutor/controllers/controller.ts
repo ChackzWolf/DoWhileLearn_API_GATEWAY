@@ -344,6 +344,20 @@ export default class TutorController {
             res.status(StatusCode.OK).json(result);
         })
     }
+
+    test(_req:Request, res:Response, _next:NextFunction){
+        TutorClient.Test(null,(err:ServiceError | null, result:any)=> {
+            if(err){
+                res.send(err)
+            }
+            console.log(result.success)
+            if(result.success){
+                res.send("User service connected")
+                return
+            }
+            res.send("User service not connected")
+        })
+    }
     
 
 }     

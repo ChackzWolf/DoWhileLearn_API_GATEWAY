@@ -8,6 +8,7 @@ tutorRoute.use(express.json());
 const controller = new TutorController();
 const middleware = new isAuthenticated() 
 
+tutorRoute.post("/test", controller.test);
 tutorRoute.post("/register", controller.register);
 tutorRoute.post('/verifyOTP', controller.verifyOtp); 
 tutorRoute.post('/resendOTP', controller.resendOtp);

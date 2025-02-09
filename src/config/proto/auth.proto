@@ -3,6 +3,13 @@ syntax = "proto3";
 service AuthService {
     rpc IsAuthenticated (IsAuthenticatedRequest) returns (IsAuthenticatedResponse);
     rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
+    rpc Test(emptyRequest) returns (TestResponse);
+}
+
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
 }
 
 message IsAuthenticatedRequest {

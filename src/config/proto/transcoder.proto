@@ -3,6 +3,13 @@ syntax = "proto3";
 
 service TranscoderService {
   rpc UploadFile(FileUploadRequest) returns (stream TranscodeStatus);
+  rpc Test(emptyRequest) returns (TestResponse);
+}
+
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
 }
 
 message FileUploadRequest {

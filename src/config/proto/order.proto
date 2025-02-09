@@ -6,6 +6,13 @@ service OrderService {
     rpc FetchOrderByTutorId (FetchOrderByTutorIdRequest) returns (FetchOrdersResponse);
     rpc FetchOrderByUserId (FetchOrderByUserIdReqeust) returns (FetchOrdersResponse);
     rpc FetchOrderByCourseId (FetchOrderByCourseIdRequest) returns (FetchOrdersResponse);
+    rpc Test(emptyRequest) returns (TestResponse);
+}
+
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
 }
 
 message EmptyRequest{}

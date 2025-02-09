@@ -14,6 +14,13 @@ service CourseService {
   rpc AddReview(ReviewData) returns (AddReviewResponse);
   rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
   rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourseList);
+    rpc Test(emptyRequest) returns (TestResponse);
+}
+
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
 }
 
 message Filters {

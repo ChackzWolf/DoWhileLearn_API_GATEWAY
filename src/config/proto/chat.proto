@@ -6,6 +6,13 @@ service ChatService {
   rpc VerifyAccess (AccessRequest) returns (AccessResponse);
   rpc GetUserChatRooms (GetChatRoomsRequest) returns (GetChatRoomsResponse);
   rpc CreateChatRoom(CreateChatRoomRequest) returns (CreateChatRoomResponse);
+  rpc Test(emptyRequest) returns (TestResponse);
+}
+
+message emptyRequest{}
+
+message TestResponse {
+    bool success = 1;
 }
 message CreateChatRoomRequest {
   string courseId = 1;
