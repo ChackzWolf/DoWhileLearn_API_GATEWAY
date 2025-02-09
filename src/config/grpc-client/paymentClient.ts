@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/Pay
 const PaymentService = grpc.loadPackageDefinition(packageDefinition).PaymentService as grpc.ServiceClientConstructor;
  
 const PaymentClient   = new PaymentService(
-    `0.0.0.0:${process.env.PAYMENT_SERVICE_PORT}`,grpc.credentials.createInsecure(),
+    `payment-service.dowhilelearn.svc.cluster.local:${process.env.PAYMENT_SERVICE_PORT}`,grpc.credentials.createInsecure(),
     {
         'grpc.max_send_message_length': 1 * 1024 * 1024 * 1024, // 1 GB
         'grpc.max_receive_message_length': 1 * 1024 * 1024 * 1024 // 1 GB

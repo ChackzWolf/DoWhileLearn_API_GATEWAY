@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/aut
 const AuthService = grpc.loadPackageDefinition(packageDefinition).AuthService as grpc.ServiceClientConstructor;
 
 const AuthClient   = new AuthService(
-    `0.0.0.0:${process.env.AUTH_GRPC_PORT}`,grpc.credentials.createInsecure()
+    `auth-service.dowhilelearn.svc.cluster.local:${process.env.AUTH_GRPC_PORT}`,grpc.credentials.createInsecure()
 );
 
 export{AuthClient};

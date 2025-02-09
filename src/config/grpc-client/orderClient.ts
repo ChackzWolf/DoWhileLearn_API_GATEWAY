@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/ord
 const OrderService = grpc.loadPackageDefinition(packageDefinition).OrderService as grpc.ServiceClientConstructor;
  
 const OrderClient   = new OrderService(
-    `0.0.0.0:${process.env.ORDER_SERVICE_PORT}`,grpc.credentials.createInsecure(),
+    `order-service.dowhilelearn.svc.cluster.local:${process.env.ORDER_SERVICE_PORT}`,grpc.credentials.createInsecure(),
     {
         'grpc.max_send_message_length': 1 * 1024 * 1024 * 1024, // 1 GB
         'grpc.max_receive_message_length': 1 * 1024 * 1024 * 1024 // 1 GB

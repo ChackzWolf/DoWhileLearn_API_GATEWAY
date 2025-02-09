@@ -26,6 +26,4 @@ adminRoute.get("/fetchAllOrders",checkAuth.checkAdminAuth, controller.fetchAllOr
 adminRoute.get("/fetchTutorDetails",checkAuth.checkAdminAuth, tutorController.fetchTutorDetails)
 
 
- 
-
 export default adminRoute;   

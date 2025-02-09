@@ -17,18 +17,18 @@ import { setupSocket } from "./socket/socketServer";
 dotenv.config();
 
 
-const app: Express = express();
+const app: Express = express(); 
 const server = createServer(app)
 setupSocket(server);
 
 // error log
 const logger = winston.createLogger({
-  level: 'info', 
-  format: winston.format.combine(
+  level: 'info',   
+  format: winston.format.combine( 
     winston.format.timestamp(),
     winston.format.json()
   ), 
-  transports: [ 
+  transports: [  
     new winston.transports.Console(), // Log to the console
     new DailyRotateFile({
       filename: 'logs/application-%DATE%.log',
@@ -37,6 +37,11 @@ const logger = winston.createLogger({
     })
   ],  
 });
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy' });
+});
+
 app.use(morgan('combined', {
   stream: {
     write: (message) => logger.info(message.trim())

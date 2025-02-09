@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/tut
 const TutorService = grpc.loadPackageDefinition(packageDefinition).TutorService as grpc.ServiceClientConstructor;
 
 const TutorClient   = new TutorService(
-    `0.0.0.0:${process.env.TUTOR_SERVICE_PORT}`,grpc.credentials.createInsecure()
+    `tutor-service.dowhilelearn.svc.cluster.local:${process.env.TUTOR_SERVICE_PORT}`,grpc.credentials.createInsecure()
 );
 
 export{TutorClient};

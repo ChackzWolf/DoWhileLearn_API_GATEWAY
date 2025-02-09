@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/adm
 const AdminService = grpc.loadPackageDefinition(packageDefinition).AdminService as grpc.ServiceClientConstructor;
 
 const AdminClient   = new AdminService(
-    `0.0.0.0:${process.env.ADMIN_SERVICE_PORT}`,grpc.credentials.createInsecure()
+    `admin-service.dowhilelearn.svc.cluster.local:${process.env.ADMIN_SERVICE_PORT}`,grpc.credentials.createInsecure()
 );
 
 export{AdminClient};

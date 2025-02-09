@@ -314,9 +314,11 @@ export default class TutorController {
     }
 
     resendPasswordOTP(req:Request, res: Response, next: NextFunction) {
-        console.log(req.body, 'trig from resend otp');
-        
+        console.log(req.body, 'trig from resend otppppppppppppp');
         TutorClient.ResendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {
+            if(err){
+                console.log('error resending otp', err)
+            }
             console.log(result)
             res.status(StatusCode.OK).json(result);
         })

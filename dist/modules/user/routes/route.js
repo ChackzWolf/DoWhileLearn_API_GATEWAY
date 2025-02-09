@@ -1,0 +1,35 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const controller_1 = __importDefault(require("../controllers/controller"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const isAuthenticated_1 = require("../../../middlewares/isAuthenticated");
+const app = (0, express_1.default)();
+const userRoute = (0, express_1.default)();
+app.use(express_1.default.json());
+const controller = new controller_1.default();
+const middlware = new isAuthenticated_1.isAuthenticated();
+app.use((0, cookie_parser_1.default)());
+userRoute.post("/register", controller.register);
+userRoute.post('/verifyOTP', controller.verifyOtp);
+userRoute.post('/resendOTP', controller.resendOtp);
+userRoute.post("/login", controller.userLogin);
+userRoute.post("/addToCart", middlware.checkUserBlocked, controller.addToCart);
+userRoute.post("/makePayment", middlware.checkUserBlocked, controller.makePayment);
+userRoute.post("/sendOtpToEmail", controller.sendOtpToEmail);
+userRoute.post("/resendOtpToEmail", controller.resendPasswordOTP);
+userRoute.post("/resetPasswordOTP", controller.resetPasswordOTP);
+userRoute.post("/updatePassword", controller.resetPassword);
+userRoute.post('/addUserReview', controller.addReview);
+userRoute.post('/updateUserDetails', controller.updateUserDetails);
+userRoute.post('/googleAuth', controller.userGoogleAuth);
+userRoute.get('/fetchReviewsOfCourse', controller.fetchReviewsOfCourse);
+userRoute.get("/getCartItems", middlware.checkUserBlocked, controller.getCartItems);
+userRoute.get("/fetchCourseDetails", controller.fetchCourseDetails);
+userRoute.get("/fetchPurchasedCourses", middlware.checkUserBlocked, controller.fetchPurchasedCourses);
+userRoute.get("/fetchUserData", controller.fetchUserDetails);
+exports.default = userRoute;
+//# sourceMappingURL=route.js.map

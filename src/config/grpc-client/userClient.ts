@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/use
 const UserService = grpc.loadPackageDefinition(packageDefinition).UserService as grpc.ServiceClientConstructor;
 
 const UserClient   = new UserService(
-    `0.0.0.0:${process.env.USER_SERVICE_URL}`,grpc.credentials.createInsecure()
+    `user-service.dowhilelearn.svc.cluster.local:${process.env.USER_SERVICE_URL}`,grpc.credentials.createInsecure()
 );
 
 export{UserClient};

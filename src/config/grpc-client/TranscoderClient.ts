@@ -17,7 +17,7 @@ const packageDefinition = protoLoader.loadSync(path.join(__dirname,"../proto/tra
 const TranscoderService = grpc.loadPackageDefinition(packageDefinition).TranscoderService as grpc.ServiceClientConstructor;
  
 const TranscoderClient   = new TranscoderService(
-    `0.0.0.0:${process.env.TRANSCODER_SERVICE_PORT}`,grpc.credentials.createInsecure(),
+    `transcoder-service.dowhilelearn.svc.cluster.local:${process.env.TRANSCODER_SERVICE_PORT}`,grpc.credentials.createInsecure(),
     {
         'grpc.max_send_message_length': 1 * 1024 * 1024 * 1024, // 1 GB
         'grpc.max_receive_message_length': 1 * 1024 * 1024 * 1024 // 1 GB
