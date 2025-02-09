@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 import multer from "multer";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { ServiceError } from "@grpc/grpc-js";
@@ -335,14 +335,14 @@ export default class CourseController {
             }
             
           })
-
-
-          
         })
       }
 
       test(_req:Request, res:Response, _next:NextFunction){
-        CourseClient.Test(null,(err:ServiceError | null, result:any)=> {
+        res.send("reached serivce api")
+
+        CourseClient.Test(null,(err:ServiceError | null, result:any
+        )=> {
             if(err){
                 res.send(err)
             }

@@ -55,7 +55,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
+  origin: ['http://localhost:5173','http://dowhilelearn.tech'] ,// Your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include all HTTP methods you need
   allowedHeaders: ['Authorization', 'Content-Type'], // Include any headers your frontend sends
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
