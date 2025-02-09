@@ -340,4 +340,18 @@ export default class CourseController {
           
         })
       }
+
+      test(_req:Request, res:Response, _next:NextFunction){
+        CourseClient.Test(null,(err:ServiceError | null, result:any)=> {
+            if(err){
+                res.send(err)
+            }
+            console.log(result.success)
+            if(result.success){
+                res.send("Course service connected")
+                return
+            }
+            res.send("Course service not connected")
+        })
+    }
 }

@@ -12,7 +12,8 @@ const uploadVideo = multer({ storage: videoStorage }).single('videoBinary'); // 
 const authController = new AuthController()
 const isAuth = authController.isAuthenticated
 const controller = new CourseController(); 
- 
+
+courseRoute.post("/test", controller.test);
 courseRoute.post("/upload", controller.UploadVideo);
 courseRoute.post("/imageUpload", controller.UploadImage);
 courseRoute.post("/submitCourse", controller.SubmitCourse);

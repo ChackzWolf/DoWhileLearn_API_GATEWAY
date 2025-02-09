@@ -352,10 +352,10 @@ export default class TutorController {
             }
             console.log(result.success)
             if(result.success){
-                res.send("User service connected")
+                res.send("tutor service connected")
                 return
             }
-            res.send("User service not connected")
+            res.send("Course service not connected")
         })
     }
     
