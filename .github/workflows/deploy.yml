@@ -2,7 +2,7 @@ name: Deploy API Gateway
 on:
   push:
     branches:
-      - master      
+      - master
 
 jobs:
   deploy:
