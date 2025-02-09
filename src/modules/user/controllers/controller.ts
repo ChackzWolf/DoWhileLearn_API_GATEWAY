@@ -331,7 +331,7 @@ export default class UserController {
         })
     } 
  
-    fetchPurchasedCourses(req: Request, res:Response, next: NextFunction) {
+    fetchPurchasedCourses(req: Request, res:Response, _next: NextFunction) {
         console.log('triggered fetch purchased course');
         const userId = req.query.userId;
         CourseClient.FetchPurchasedCourses({userId}, (err: ServiceError | null, result:any)=>{
@@ -339,7 +339,16 @@ export default class UserController {
             res.status(StatusCode.OK).json(result);
         })
     }
-
+    
+    test(req:Request, res:Response, _next:NextFunction){
+        UserClient.Test(null,(err:ServiceError | null, result:any)=> {
+            console.log(result.success)
+            if(result.success){
+                res.send("User service connected")
+            }
+            res.status(StatusCode.OK).json(result);
+        })
+    }
      
 
 }  

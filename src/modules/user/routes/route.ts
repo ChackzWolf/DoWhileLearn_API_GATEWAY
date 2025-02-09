@@ -13,6 +13,7 @@ const middlware = new isAuthenticated();
 app.use(cookieParser());
 
 userRoute.get("/test", (req,res)=>{res.send("User route working docker push 7")});
+userRoute.get("/user/test", controller.test);
 userRoute.post("/register", controller.register);
 userRoute.post('/verifyOTP', controller.verifyOtp);  
 userRoute.post('/resendOTP', controller.resendOtp);
