@@ -61,17 +61,19 @@ app.use(cors({
     'https://dowhilelearn.tech'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Authorization', 'Content-Type'],
+  allowedHeaders: [
+    'Authorization', 
+    'Content-Type',
+    'Access-Control-Allow-Headers',
+    'Origin',
+    'Accept',
+    'X-Requested-With',
+    'Access-Control-Request-Method',
+    'Access-Control-Request-Headers'
+  ],
+  exposedHeaders: ['Set-Cookie'],
   credentials: true
 }));
-
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", userRoute);
