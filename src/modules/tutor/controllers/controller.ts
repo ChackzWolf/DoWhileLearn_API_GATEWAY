@@ -211,26 +211,27 @@ export default class TutorController {
                     const {refreshToken, accessToken} = createToken(tutorData, "TUTOR")
 
 
-                    res.cookie('refreshToken', refreshToken, { 
-                        httpOnly: true,  
-                        secure: true,
-                        sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
-                        domain: '.dowhilelearn.space', // Specify your API domain
-                        path: '/',
-                        maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
-                    })  
-                    .cookie('refreshToken', refreshToken, { 
-                        httpOnly: true,  
-                        secure: true,
-                        sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
-                        domain: '.dowhilelearn.space', // Specify your API domain
-                        path: '/',
-                        maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
-                    })
+                    // res.cookie('refreshToken', refreshToken, { 
+                    //     httpOnly: true,  
+                    //     secure: true,
+                    //     sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
+                    //     domain: '.dowhilelearn.space', // Specify your API domain
+                    //     path: '/',
+                    //     maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
+                    // })  
+                    // .cookie('refreshToken', refreshToken, { 
+                    //     httpOnly: true,  
+                    //     secure: true,
+                    //     sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
+                    //     domain: '.dowhilelearn.space', // Specify your API domain
+                    //     path: '/',
+                    //     maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
+                    // })
+                    res
                     .status(StatusCode.Created)
                     .send({message, success, accessToken, refreshToken,tutorId:tutorData._id, tutorData});
 
-                    
+
                 }else{
                     // Handle failed login cases 
                     if(result.message === 'isBlocked'){
