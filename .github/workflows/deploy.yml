@@ -36,6 +36,9 @@ jobs:
       - name: Connect to Kubernetes cluster
         run: doctl kubernetes cluster kubeconfig save dowhilelearn-cluster
 
-      - name: Update Kubernetes deployment
+      - name: Deploy to Kubernetes
         run: |
-          kubectl set image deployment/api-gateway api-gateway=jacksoncheriyan05/api-gateway:${{ steps.vars.outputs.sha_short }} -n dowhilelearn
+          helm upgrade api-gateway ./helm/api-gateway \
+            --set image.tag=${{ steps.vars.outputs.sha_short }} \
+            --namespace dowhilelearn \
+            --install
