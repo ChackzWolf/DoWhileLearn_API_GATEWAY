@@ -227,7 +227,6 @@ export default class TutorController {
                         path: '/',
                         maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
                     })
-                    res
                     .status(StatusCode.Created)
                     .send({message, success, accessToken, refreshToken,tutorId:tutorData._id, tutorData});
 
