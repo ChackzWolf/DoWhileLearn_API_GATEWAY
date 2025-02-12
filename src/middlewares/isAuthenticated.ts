@@ -118,7 +118,6 @@ export class isAuthenticated {
     }
 
     checkAdminAuth(req: Request, res: Response, next: NextFunction){
-        
         const {adminAccessToken, adminRefreshToken} = req.cookies
         const data = {
             accessToken: adminAccessToken,

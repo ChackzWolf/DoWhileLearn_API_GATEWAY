@@ -54,12 +54,30 @@ app.use(morgan('combined', {
 const port = process.env.PORT || 5000;
 
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+  console.log("Incoming request origin:", req.headers.origin);
+  next();
+});
+
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://dowhilelearn.tech',
-    'https://dowhilelearn.tech'
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://dowhilelearn.tech',
+      'https://dowhilelearn.tech'
+    ];
+
+    console.log("CORS checking origin:", origin);
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      console.log("CORS blocked origin:", origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: [
     'Authorization', 
@@ -74,6 +92,8 @@ app.use(cors({
   exposedHeaders: ['Set-Cookie'],
   credentials: true
 }));
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", userRoute);
