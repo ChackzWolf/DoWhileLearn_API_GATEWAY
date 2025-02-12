@@ -24,7 +24,7 @@ userRoute.post("/sendOtpToEmail", controller.sendOtpToEmail)
 userRoute.post("/resendOtpToEmail", controller.resendPasswordOTP)
 userRoute.post("/resetPasswordOTP",controller.resetPasswordOTP)
 userRoute.post("/updatePassword",controller.resetPassword)
-userRoute.post('/addUserReview', controller.addReview);
+userRoute.post('/addUserReview', controller.addReview); 
 userRoute.post('/updateUserDetails', controller.updateUserDetails)
 userRoute.post('/googleAuth', controller.userGoogleAuth)
 

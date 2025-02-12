@@ -81,7 +81,6 @@ message RequestFetchTutorCourse {
 message ResponseFetchCourseList {
   repeated ResponseFetchCourse courses = 1;
 }
-message emptyRequest {}
 
 message VideoRequest {
   bytes videoBinary = 1; // Video data as binary
