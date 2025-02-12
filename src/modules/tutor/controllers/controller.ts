@@ -207,14 +207,30 @@ export default class TutorController {
                 res.status(500).send(err.message);  
             }else{
                 if(success){
-                        console.log(tutorData, 'tutor data')
+                    console.log(tutorData, 'tutor data')
                     const {refreshToken, accessToken} = createToken(tutorData, "TUTOR")
+
+
                     res.cookie('refreshToken', refreshToken, { 
                         httpOnly: true,  
-                        secure: true, // Make sure to use 'secure' in production with HTTPS
-                        sameSite: 'strict' 
-                    });
-                    res.status(StatusCode.Created).send({message, success, accessToken, refreshToken,tutorId:tutorData._id, tutorData});
+                        secure: true,
+                        sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
+                        domain: '.dowhilelearn.space', // Specify your API domain
+                        path: '/',
+                        maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
+                    })  
+                    .cookie('refreshToken', refreshToken, { 
+                        httpOnly: true,  
+                        secure: true,
+                        sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
+                        domain: '.dowhilelearn.space', // Specify your API domain
+                        path: '/',
+                        maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
+                    })
+                    .status(StatusCode.Created)
+                    .send({message, success, accessToken, refreshToken,tutorId:tutorData._id, tutorData});
+
+                    
                 }else{
                     // Handle failed login cases 
                     if(result.message === 'isBlocked'){
