@@ -11,11 +11,10 @@ import { AuthClient } from "../config/grpc-client/authClient";
 export class isAuthenticated {  
     // Middleware to check if the user is blocked
     checkUserBlocked(req: Request, res: Response, next: NextFunction) {
-        const {userId, userAccessToken} = req.cookies;
+        const userAccessToken = req.headers.authorization?.split(' ')[1];
+        const userId = req.headers['x-user-id']; 
         console.log(userId, 'triggered middleware.......................................');
-
-
-
+        
         const data = {
             accessToken: userAccessToken,
             role:'USER'
