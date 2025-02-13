@@ -122,15 +122,13 @@ export class isAuthenticated {
 
     checkAdminAuth(req: Request, res: Response, next: NextFunction){
         const adminAccessToken = req.headers.authorization?.split(' ')[1];
-        const adminRefreshToken = req.headers['x-refresh-token']
         const data = {
             accessToken: adminAccessToken,
-            refreshToken: adminRefreshToken,
             role:'ADMIN'
         }
         console.log('trigered here', data);
         AuthClient.IsAuthenticated(data, (err: ServiceError | null, result: any) => {
-            console.log('triggered api admin')
+            console.log('triggered api admin', result)
             if (err) {
                 console.error(err, 'auth check faild');
                 res.status(500).send(err.message);
