@@ -215,7 +215,6 @@ export default class TutorController {
                         httpOnly: true,  
                         secure: true,
                         sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
-                        domain: '.dowhilelearn.space', // Specify your API domain
                         path: '/',
                         maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
                     })  
@@ -223,7 +222,6 @@ export default class TutorController {
                         httpOnly: true,  
                         secure: true,
                         sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain
-                        domain: '.dowhilelearn.space', // Specify your API domain
                         path: '/',
                         maxAge: 7 * 24 * 60 * 60 * 1000 // example: 7 days in milliseconds
                     })
