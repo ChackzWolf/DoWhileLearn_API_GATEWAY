@@ -22,7 +22,7 @@ export default class AuthController {
 
     userRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.headers['x-refresh-token']
+        const refreshToken = req.body.userRefreshToken
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
             res.status(401).json({ success: false, message: "Refresh token not provided." });
@@ -59,8 +59,7 @@ export default class AuthController {
     }
     tutorRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.headers['x-refresh-token']
-
+        const refreshToken = req.body.tutorRefreshToken
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
             res.status(401).json({ success: false, message: "Refresh token not provided." });
@@ -97,7 +96,7 @@ export default class AuthController {
     }
     adminRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.headers['x-refresh-token']
+        const refreshToken = req.body.adminRefreshToken
 
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
