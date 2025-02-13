@@ -211,7 +211,7 @@ export default class TutorController {
                     const {refreshToken, accessToken} = createToken(tutorData, "TUTOR")
 
 
-                    res.cookie('refreshToken', refreshToken, { 
+                    res.cookie('accessToken', accessToken, { 
                         httpOnly: true,  
                         secure: true,
                         sameSite: 'none',  // Changed from 'strict' to 'none' for cross-domain

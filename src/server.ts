@@ -49,18 +49,14 @@ app.use(morgan('combined', {
 })); 
 // error log end
 
-
-
-const port = process.env.PORT || 5000;
-
-app.use(cookieParser());
-
 app.use((req, res, next) => {
   console.log("Incoming request origin:", req.headers.origin);
   next();
 });
 
+const port = process.env.PORT || 5000;
 
+app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
@@ -91,6 +87,13 @@ app.use(cors({
   exposedHeaders: ['Set-Cookie'],
   credentials: true
 }));
+
+
+
+
+
+
+
 
 
 app.use(express.json());
