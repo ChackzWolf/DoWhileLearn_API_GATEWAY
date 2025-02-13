@@ -22,7 +22,7 @@ export default class AuthController {
 
     userRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.cookies.userRefreshToken; // Extract refreshToken from cookies
+        const refreshToken = req.headers['x-refresh-token']
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
             res.status(401).json({ success: false, message: "Refresh token not provided." });
@@ -59,7 +59,8 @@ export default class AuthController {
     }
     tutorRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.cookies.tutorRefreshToken; // Extract refreshToken from cookies
+        const refreshToken = req.headers['x-refresh-token']
+
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
             res.status(401).json({ success: false, message: "Refresh token not provided." });
@@ -96,7 +97,8 @@ export default class AuthController {
     }
     adminRefreshToken(req: Request, res: Response, _next: NextFunction): void {
         console.log('refresh token hit')
-        const refreshToken = req.cookies.adminRefreshToken; // Extract refreshToken from cookies
+        const refreshToken = req.headers['x-refresh-token']
+
         console.log(refreshToken,':refresh token')
         if (!refreshToken) {
             res.status(401).json({ success: false, message: "Refresh token not provided." });
@@ -121,10 +123,6 @@ export default class AuthController {
             const { success, message, accessToken, refreshToken: newRefreshToken } = result;
         
             if (success) {
-                if (newRefreshToken) {
-                    // res.cookie('accessToken', accessToken, { httpOnly: true, secure: true })    
-                    // res.cookie('refreshToken', newRefreshToken, { httpOnly: true, path: '/' });
-                }
                 res.status(200).json({ success: true, accessToken, message, refreshToken : newRefreshToken });
             } else {
                 res.status(400).json({ success: false, message: "Invalid refresh token response." });
