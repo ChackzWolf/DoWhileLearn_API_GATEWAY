@@ -84,8 +84,8 @@ app.use(cors({
     'Access-Control-Request-Method',
     'Access-Control-Request-Headers',
     'x-tutor-id',
-    'x-admin-id',
     'x-user-id',
+    'x-refresh-token',
   ],
   exposedHeaders: ['Set-Cookie'],
   credentials: true

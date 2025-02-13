@@ -14,7 +14,7 @@ export class isAuthenticated {
         const userAccessToken = req.headers.authorization?.split(' ')[1];
         const userId = req.headers['x-user-id']; 
         console.log(userId, 'triggered middleware.......................................');
-        
+
         const data = {
             accessToken: userAccessToken,
             role:'USER'
@@ -121,7 +121,8 @@ export class isAuthenticated {
     }
 
     checkAdminAuth(req: Request, res: Response, next: NextFunction){
-        const {adminAccessToken, adminRefreshToken} = req.cookies
+        const adminAccessToken = req.headers.authorization?.split(' ')[1];
+        const adminRefreshToken = req.headers['x-refresh-token']
         const data = {
             accessToken: adminAccessToken,
             refreshToken: adminRefreshToken,
