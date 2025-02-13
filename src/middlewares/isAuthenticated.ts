@@ -67,11 +67,12 @@ export class isAuthenticated {
     }
 
     checkTutorBlocked(req: Request, res: Response, next: NextFunction) {
+        console.log('here it triggeres')
         const tutorAccessToken = req.headers.authorization?.split(' ')[1];
         const tutorId = req.headers['x-tutor-id']; 
 
         console.log(tutorId, 'triggered middleware......');
-        
+
         const data = {
             accessToken: tutorAccessToken,
             role:'TUTOR'
