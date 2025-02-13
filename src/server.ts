@@ -82,7 +82,8 @@ app.use(cors({
     'Accept',
     'X-Requested-With',
     'Access-Control-Request-Method',
-    'Access-Control-Request-Headers'
+    'Access-Control-Request-Headers',
+    'x-tutor-id'
   ],
   exposedHeaders: ['Set-Cookie'],
   credentials: true
