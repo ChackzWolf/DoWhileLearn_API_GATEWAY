@@ -247,8 +247,8 @@ export default class TutorController {
 
     fetchTutorCourse(req:Request, res:Response, next: NextFunction) {
         console.log('trig fetching course')
-        const tutorId = req.query.tutorId as string;
-        CourseClient.FetchTutorCourse({tutorId}, (err: ServiceError | null, result: any) => {
+        const {tutorId,search} = req.query 
+        CourseClient.FetchTutorCourse({tutorId,search}, (err: ServiceError | null, result: any) => {
           if(err){
             console.error("gRPC error:", err);
             return res.status(500).send("Error from gRPC service:" + err.message);
