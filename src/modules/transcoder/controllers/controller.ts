@@ -18,7 +18,6 @@ export default class TranscoderController {
     constructor() {
         this.UploadVideo = this.UploadVideo.bind(this);
     }
-
     public UploadVideo(req: Request, res: Response, next: NextFunction): void {
         console.log('reached the transcoder here.', req.body)
         const {tutorId} = req.body;

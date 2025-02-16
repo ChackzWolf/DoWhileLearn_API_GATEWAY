@@ -267,15 +267,15 @@ export default class TutorController {
                 return res.status(500).send("Error from gRPC service:" + err.message);
             }
             if(result.success && result.studentIds){
-                console.log(result);
-                UserClient.FetchUsersByIds({studentIds:result.studentIds}, (err: ServiceError | null, result: any)=> {
-                    if(err){
-                        console.error("gRPC error user service:", err);
-                        return res.status(500).send("Error from gRPC service user service:" + err.message);
-                    }
-                    console.log(result, 'fetched users by Ids')
-                    res.status(StatusCode.OK).json(result);
-                } )
+                    console.log(result, '');
+                    UserClient.FetchUsersByIds({studentIds:result.studentIds}, (err: ServiceError | null, result: any)=> {
+                        if(err){
+                            console.error("gRPC error user service:", err);
+                            return res.status(500).send("Error from gRPC service user service:" + err.message);
+                        }
+                        console.log(result, 'fetched users by Ids')
+                        res.status(StatusCode.OK).json(result);
+                    } )
 
             }
         })

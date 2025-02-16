@@ -60,7 +60,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'http://dowhilelearn.tech',
+      'http://localhost:5173',
       'https://dowhilelearn.tech'
     ];
 
