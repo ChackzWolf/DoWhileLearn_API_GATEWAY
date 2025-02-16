@@ -58,7 +58,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cookieParser());
 app.use(cors({
-  origin: (origin, callback) => {
+  origin: (origin, callback) => { 
     const allowedOrigins = [
       'http://localhost:5173',
       'https://dowhilelearn.tech'

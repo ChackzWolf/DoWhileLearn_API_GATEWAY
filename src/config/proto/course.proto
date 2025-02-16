@@ -14,7 +14,7 @@ service CourseService {
   rpc AddReview(ReviewData) returns (AddReviewResponse);
   rpc FetchReviewsOfCourse(FetchReviewsOfCourseRequest) returns (FetchReviewsOfCourseResponse);
   rpc FetchPurchasedCourses(FetchPurchasedCourseRequest) returns (ResponseFetchCourseList);
-    rpc Test(emptyRequest) returns (TestResponse);
+  rpc Test(emptyRequest) returns (TestResponse);
 }
 
 message emptyRequest{}
@@ -27,6 +27,7 @@ message Filters {
   string category = 1;
   string priceOrder = 2;
   string ratingOrder = 3;
+  string search = 4;
 }
 
 message FetchPurchasedCourseRequest {
