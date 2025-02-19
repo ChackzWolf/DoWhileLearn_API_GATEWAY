@@ -146,7 +146,7 @@ message GetCartItemsIdsResponse {
   bool success = 2;         // Field for indicating success
 }
 
-message CourseStatusResponse {
+mmessage CourseStatusResponse {
     bool inPurchase = 1;
     bool inCart = 2;
     bool inWishlist = 3;
@@ -156,10 +156,11 @@ message CourseStatusResponse {
 message PurchasedCourseStatus {
     string courseId = 1;
     int32 progress = 2;
-    ICurrentLesson currentLesson = 4;
-    repeated ICompletedLesson completedLessons = 5;
-    string lastAccessed = 6;
-    bool completed = 7;
+    ICurrentLesson currentLesson = 3;
+    repeated ICompletedLesson completedLessons = 4;
+    string lastAccessed = 5;
+    bool completed = 6;
+    string purchasedStatusId = 7;  
 }
 
 message ICurrentLesson {
