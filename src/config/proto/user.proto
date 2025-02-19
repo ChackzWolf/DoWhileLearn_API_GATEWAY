@@ -147,31 +147,32 @@ message GetCartItemsIdsResponse {
 }
 
 message CourseStatusResponse {
-    bool inPurchase = 1;
-    bool inCart = 2;
-    bool inWishlist = 3;
-    PurchasedCourseStatus purchasedCourseStatus = 4;
+    bool in_purchase = 1;
+    bool in_cart = 2;
+    bool in_wishlist = 3;
+    PurchasedCourseStatus purchased_course_status = 4;
 }
 
 message PurchasedCourseStatus {
-    string courseId = 1;
+    string course_id = 1;
     int32 progress = 2;
-    ICurrentLesson currentLesson = 4;
-    repeated ICompletedLesson completedLessons = 5;
-    string lastAccessed = 6;
-    bool completed = 7;
+    CurrentLesson current_lesson = 3;
+    repeated CompletedLesson completed_lessons = 4;
+    string last_accessed = 5;
+    bool completed = 6;
+    string purchased_status_id = 7;
 }
 
-message ICurrentLesson {
+message CurrentLesson {
     int32 module = 1;
     int32 lesson = 2;
 }
 
-message ICompletedLesson {
+message CompletedLesson {
     int32 module = 1;
     int32 lesson = 2;
-    bool noTest = 3;
-    bool testCompleted = 4;
+    bool no_test = 3;
+    bool test_completed = 4;
 }
 
 message addPurchasedCoursesRequest {
