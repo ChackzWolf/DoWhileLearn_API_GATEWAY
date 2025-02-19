@@ -150,6 +150,28 @@ message CourseStatusResponse {
     bool inPurchase = 1;
     bool inCart = 2;
     bool inWishlist = 3;
+    PurchasedCourseStatus purchasedCourseStatus = 4;
+}
+
+message PurchasedCourseStatus {
+    string courseId = 1;
+    int32 progress = 2;
+    ICurrentLesson currentLesson = 4;
+    repeated ICompletedLesson completedLessons = 5;
+    string lastAccessed = 6;
+    bool completed = 7;
+}
+
+message ICurrentLesson {
+    int32 module = 1;
+    int32 lesson = 2;
+}
+
+message ICompletedLesson {
+    int32 module = 1;
+    int32 lesson = 2;
+    bool noTest = 3;
+    bool testCompleted = 4;
 }
 
 message addPurchasedCoursesRequest {
