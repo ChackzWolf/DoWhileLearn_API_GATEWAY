@@ -146,7 +146,7 @@ message GetCartItemsIdsResponse {
   bool success = 2;         // Field for indicating success
 }
 
-mmessage CourseStatusResponse {
+message CourseStatusResponse {
     bool inPurchase = 1;
     bool inCart = 2;
     bool inWishlist = 3;
