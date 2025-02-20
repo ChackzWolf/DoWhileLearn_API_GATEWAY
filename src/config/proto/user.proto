@@ -25,7 +25,7 @@ service UserService {
     rpc UpdateUserDetails(UpdateUserDetailsRequest) returns(UpdateUserDetailsResponse);
     rpc GoogleAuthentication(GoogleAuthenticationRequest) returns(GoogleAuthenticationResponse);
     rpc Test(EmptyRequest) returns (TestResponse);
-    rpc UpdateCurrentLesson (UpdateCurrentLessonRequest) returns (ICurrentLesson) ;
+    rpc UpdateCurrentLesson(UpdateCurrentLessonRequest) returns (ICurrentLesson) ;
 }
 
 message UpdateCurrentLessonRequest {

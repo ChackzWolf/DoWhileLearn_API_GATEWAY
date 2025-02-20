@@ -343,7 +343,7 @@ export default class UserController {
     updateCurrentLesson(req:Request, res:Response, _next: NextFunction) {
         console.log('triggered update current lesson', req.query);
         const data = req.query;
-        CourseClient.UpdateCurrentLesson(data, (err: ServiceError | null, result:any)=>{
+        UserClient.UpdateCurrentLesson(data, (err: ServiceError | null, result:any)=>{
             console.log(result, 'updated current lesson')
             res.status(StatusCode.OK).json(result);
         })
