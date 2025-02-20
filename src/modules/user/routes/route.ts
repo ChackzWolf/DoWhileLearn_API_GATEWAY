@@ -25,10 +25,10 @@ userRoute.post("/sendOtpToEmail", controller.sendOtpToEmail)
 userRoute.post("/resendOtpToEmail", controller.resendPasswordOTP)
 userRoute.post("/resetPasswordOTP",controller.resetPasswordOTP)
 userRoute.post("/updatePassword",controller.resetPassword)
-userRoute.post('/addUserReview', controller.addReview); 
-userRoute.post('/updateUserDetails', controller.updateUserDetails)
+userRoute.post('/addUserReview',middlware.checkUserBlocked, controller.addReview); 
+userRoute.post('/updateUserDetails',middlware.checkUserBlocked , controller.updateUserDetails)
 userRoute.post('/googleAuth', controller.userGoogleAuth)
-
+userRoute.post('/updateCurrentLesson',middlware.checkUserBlocked, controller.updateCurrentLesson)
 
 userRoute.get('/fetchReviewsOfCourse', controller.fetchReviewsOfCourse);
 userRoute.get("/getCartItems",middlware.checkUserBlocked, controller.getCartItems)

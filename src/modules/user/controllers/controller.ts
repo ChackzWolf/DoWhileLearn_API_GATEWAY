@@ -339,6 +339,15 @@ export default class UserController {
             res.status(StatusCode.OK).json(result);
         })
     }
+
+    updateCurrentLesson(req:Request, res:Response, _next: NextFunction) {
+        console.log('triggered fetch purchased course');
+        const userId = req.query.userId;
+        CourseClient.UpdateCurrentLesson({userId}, (err: ServiceError | null, result:any)=>{
+            console.log(result, 'fetched purchased course')
+            res.status(StatusCode.OK).json(result);
+        })
+    }
     
     test(_req:Request, res:Response, _next:NextFunction){
         UserClient.Test(null,(err:ServiceError | null, result:any)=> {
