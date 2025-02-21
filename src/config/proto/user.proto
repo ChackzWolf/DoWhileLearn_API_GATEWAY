@@ -35,6 +35,8 @@ message UpdateCompletedLessonRequest {
     int32 moduleIndex = 3;
     int32 lessonIndex = 4;
     int32 totalLessons = 5;
+    string courseName = 6;
+    string tutorName = 7;
 }
 
 message UpdateCompletedLessonResponse {
