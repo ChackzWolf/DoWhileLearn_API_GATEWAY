@@ -41,10 +41,6 @@ message UpdateCompletedLessonResponse {
     PurchasedCourseStatus data = 1;
 }
 
-
-
-
-
 message UpdateCurrentLessonRequest {
     string courseId = 1;
     string userId = 2;
