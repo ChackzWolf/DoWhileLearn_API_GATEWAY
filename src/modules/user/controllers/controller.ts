@@ -344,11 +344,27 @@ export default class UserController {
         console.log('triggered update current lesson', req.body);
         const data = req.body;
         UserClient.UpdateCurrentLesson(data, (err: ServiceError | null, result:any)=>{
+            if(err){
+                console.log(err)
+                throw new Error('error updating current lesson.')
+            }
             console.log(result, 'updated current lesson')
             res.status(StatusCode.OK).json(result);
         })
     }
-    
+
+    updateCompletedLesson(req:Request, res:Response, _next: NextFunction) {
+        console.log('triggered update completed lesson', req.body);
+        const data = req.body;
+        UserClient.UpdateCompletedLesson(data, (err: ServiceError | null, result:any)=>{
+            if(err){
+                console.log(err)
+                throw new Error('error updating completed lesson.')
+            }
+            console.log(result, 'updated completed lesson')
+            res.status(StatusCode.OK).json(result);
+        })
+    }
     test(_req:Request, res:Response, _next:NextFunction){
         UserClient.Test(null,(err:ServiceError | null, result:any)=> {
             if(err){
