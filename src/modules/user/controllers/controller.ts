@@ -372,12 +372,13 @@ export default class UserController {
             courseId:id,
             userId,
         }
+        console.log(data,'///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
         UserClient.GetCertificate(data, (err: ServiceError | null, result:any)=>{
             if(err){
                 console.log(err)
                 throw new Error('Error getting certificate.')
             }
-            console.log(result, 'Fetched certificate')
+            console.log(result, 'Fetched certificate////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
             res.status(StatusCode.OK).json(result);
         })
     }
