@@ -367,7 +367,11 @@ export default class UserController {
     }
 
     getCertificate(req:Request, res:Response , _next: NextFunction){
-        const data = req.params 
+        const {id,userId} = req.query 
+        const data = {
+            courseId:id,
+            userId,
+        }
         UserClient.GetCertificate(data, (err: ServiceError | null, result:any)=>{
             if(err){
                 console.log(err)
