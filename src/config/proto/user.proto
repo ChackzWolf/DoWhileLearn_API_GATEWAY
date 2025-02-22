@@ -38,7 +38,7 @@ message GetCertificateRequest {
 
 message GetCertificateResponse {
     bool success  = 1;
-    Certificate Certificate =2;
+    Certificate certificate =2;
 }
 
 
