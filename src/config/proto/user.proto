@@ -27,7 +27,23 @@ service UserService {
     rpc Test(EmptyRequest) returns (TestResponse);
     rpc UpdateCurrentLesson(UpdateCurrentLessonRequest) returns (ICurrentLesson) ;
     rpc UpdateCompletedLesson(UpdateCompletedLessonRequest) returns (UpdateCompletedLessonResponse);
+    rpc GetCertificate(GetCertificateRequest) returns (Certificate);
 }
+
+message GetCertificateRequest {
+    string userId = 1;
+    string courseId = 2;
+}
+
+message Certificate {
+    string courseId = 1;
+    string tile = 2;
+    string issueDate = 3;
+    string certificateUrl = 4;
+}
+
+
+
 
 message UpdateCompletedLessonRequest {
     string userId = 1;

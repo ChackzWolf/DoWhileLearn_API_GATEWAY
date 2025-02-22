@@ -365,6 +365,18 @@ export default class UserController {
             res.status(StatusCode.OK).json(result);
         })
     }
+
+    getCertificate(req:Request, res:Response , _next: NextFunction){
+        const data = req.params 
+        UserClient.GetCertificate(data, (err: ServiceError | null, result:any)=>{
+            if(err){
+                console.log(err)
+                throw new Error('Error getting certificate.')
+            }
+            console.log(result, 'Fetched certificate')
+            res.status(StatusCode.OK).json(result);
+        })
+    }
     test(_req:Request, res:Response, _next:NextFunction){
         UserClient.Test(null,(err:ServiceError | null, result:any)=> {
             if(err){

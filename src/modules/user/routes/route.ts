@@ -35,7 +35,8 @@ userRoute.get("/getCartItems",middlware.checkUserBlocked, controller.getCartItem
 userRoute.get("/fetchCourseDetails" , controller.fetchCourseDetails)
 userRoute.get("/fetchPurchasedCourses", middlware.checkUserBlocked, controller.fetchPurchasedCourses)
 userRoute.get("/fetchUserData" , controller.fetchUserDetails);
-
+userRoute.get("/getCertificate", controller.getCertificate);
+ 
 
 
 export default userRoute; 
