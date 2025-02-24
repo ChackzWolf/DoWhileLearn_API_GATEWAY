@@ -286,9 +286,9 @@ message UserData {
     bool isblocked = 5;
     repeated string cart = 6;
     repeated string wishlist = 7;
-    repeated string purchasedCourses = 8;
-    google.protobuf.Timestamp createdAt = 9;
-    google.protobuf.Timestamp updatedAt =10;
+    repeated PurchasedCourseStatus purchasedCourses = 8;
+    string createdAt = 9;
+    string updatedAt =10;
     string _id = 11;
     string userId = 12;
     string profilePicture = 13;
