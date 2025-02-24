@@ -295,6 +295,7 @@ message UserData {
     string bio = 14;
     string phoneNumber = 15;
     SocialMediaLinks socialLinks = 16;
+    repeated Certificate certifications = 17;
 }
 
 message SocialMediaLinks {
