@@ -31,12 +31,15 @@ userRoute.post('/googleAuth', controller.userGoogleAuth);
 userRoute.post('/updateCurrentLesson',middlware.checkUserBlocked, controller.updateCurrentLesson);
 userRoute.post('/updateCompletedLesson',middlware.checkUserBlocked, controller.updateCompletedLesson);
 
+
 userRoute.get('/fetchReviewsOfCourse', controller.fetchReviewsOfCourse);
 userRoute.get("/getCartItems",middlware.checkUserBlocked, controller.getCartItems)
 userRoute.get("/fetchCourseDetails" , controller.fetchCourseDetails)
 userRoute.get("/fetchPurchasedCourses", middlware.checkUserBlocked, controller.fetchPurchasedCourses)
-userRoute.get("/fetchUserData" , controller.fetchUserDetails);
-userRoute.get("/getCertificate", controller.getCertificate);
+userRoute.get("/fetchUserData" , middlware.checkUserBlocked, controller.fetchUserDetails);
+userRoute.get("/getCertificate", middlware.checkUserBlocked, controller.getCertificate);
+userRoute.get("/fetchOrdersOfUser" ,middlware.checkUserBlocked , controller.fetchOrdersOfUser);
+
  
 
 

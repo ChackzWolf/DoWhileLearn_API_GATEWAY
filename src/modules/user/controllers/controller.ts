@@ -5,6 +5,7 @@ import { StatusCode } from "../../../interface/enums";
 import { PaymentClient } from "../../../config/grpc-client/paymentClient";
 import { CourseClient } from "../../../config/grpc-client/courseClient";
 import { TutorClient } from "../../../config/grpc-client/tutorClient";
+import { OrderClient } from "../../../config/grpc-client/orderClient";
 
 
 export default class UserController {  
@@ -372,16 +373,24 @@ export default class UserController {
             courseId:id,
             userId,
         }
-        console.log(data,'///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
         UserClient.GetCertificate(data, (err: ServiceError | null, result:any)=>{
             if(err){
                 console.log(err)
                 throw new Error('Error getting certificate.')
             }
-            console.log(result, 'Fetched certificate////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
+           res.status(StatusCode.OK).json(result);
+        })
+    }
+
+    fetchOrdersOfUser(req:Request, res:Response, next:NextFunction){
+        const userId = req.query.userId as string;
+        console.log('tutorId:', userId)
+        OrderClient.FetchOrderByUserId({userId}, (err: ServiceError | null, result:any)=> {
+            console.log(result);
             res.status(StatusCode.OK).json(result);
         })
     }
+
     test(_req:Request, res:Response, _next:NextFunction){
         UserClient.Test(null,(err:ServiceError | null, result:any)=> {
             if(err){
