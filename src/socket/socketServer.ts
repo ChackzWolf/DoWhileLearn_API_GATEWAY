@@ -17,10 +17,11 @@ export let globalIO :Server| null = null
 export const setupSocket = (server: any) => {
     const io = new Server(server, {
         cors: {
-            origin: ['http://localhost:5173','https://dowhilelearn.tech'], // Frontend URL
-            methods: ['GET', 'POST']
+            origin: ['http://localhost:5173', 'https://dowhilelearn.tech'], // Frontend URLs
+            methods: ['GET', 'POST'],
+            credentials: true // Allow cookies/auth headers if needed
         }
-    }); 
+    });
 
     // JWT Secret (store in environment variable)
     const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your_jwt_secret';
@@ -134,7 +135,7 @@ export const setupSocket = (server: any) => {
            
                 const { firstName, lastName, profilePicture } = response.userData;
                 console.log(socket.courseIds, 'socket courseIds');
-          console.log(response.userData, 'user data///////////////////////////////////')
+          
                 // Verify if the user is part of the course
                 if (socket.courseIds?.includes(courseId)) {
                   const message = {
