@@ -371,4 +371,5 @@ message ChatData {
     string courseId = 2;
     string content  = 3;
     string name = 4;
+    string imageUrl = 5;
 }
