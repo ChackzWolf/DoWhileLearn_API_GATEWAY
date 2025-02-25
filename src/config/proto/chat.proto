@@ -58,6 +58,7 @@ message Message {
   string content = 4;
   string timestamp = 5;
   string username = 6;
+  string imageUrl = 7;
 }
 
 message MessageResponse {
