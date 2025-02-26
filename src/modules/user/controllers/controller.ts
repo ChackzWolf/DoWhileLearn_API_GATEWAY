@@ -35,7 +35,7 @@ export default class UserController {
             if (success) {
                 res.status(200).json({ success: true, message: "OTP verified successfully.", accessToken, refreshToken, userId });
             } else {
-                res.status(400).json({ success: false, message});
+                res.status(200).json({ success: false, message});
             }
         })
     }
