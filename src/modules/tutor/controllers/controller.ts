@@ -181,7 +181,7 @@ export default class TutorController {
     
                 res.status(200).json({ success: true, message: "OTP verified successfully." , refreshToken, accessToken, id:tutorData._id,tutorId, tutorData});
             } else {
-                res.status(400).json({ success: false, message: "Invalid OTP response." });
+                res.status(200).json({ success: false, message: "Invalid OTP response." });
             }
         })
     }
