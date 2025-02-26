@@ -24,13 +24,14 @@ export default class UserController {
     }  
 
     verifyOtp(req: Request, res: Response, next: NextFunction): void {
+        console.log('trig ', req.body)
         UserClient.VerifyOTP(req.body, (err: ServiceError | null, result: any) => {
             const {message, success, accessToken, refreshToken, userId} = result;
             if (err) {
                 console.error("Error verifying OTP:", err);
                 return res.status(500).send(err.message);  // Return early if there's an error
             }
-    
+            console.log(result, 'result verify otp user')
             if (success) {
                 res.status(200).json({ success: true, message: "OTP verified successfully.", accessToken, refreshToken, userId });
             } else {
