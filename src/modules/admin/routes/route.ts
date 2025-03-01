@@ -24,6 +24,6 @@ adminRoute.get("/fetchStudentData",checkAuth.checkAdminAuth, controller.FetchStu
 adminRoute.get("/fetchTutorData",checkAuth.checkAdminAuth, controller.FetchTutorData);
 adminRoute.get("/fetchAllOrders",checkAuth.checkAdminAuth, controller.fetchAllOrders)
 adminRoute.get("/fetchTutorDetails",checkAuth.checkAdminAuth, tutorController.fetchTutorDetails)
-
+adminRoute.get("/fetchUserDetails",checkAuth.checkAdminAuth, tutorController.fetchUserDetails)
 
 export default adminRoute;   

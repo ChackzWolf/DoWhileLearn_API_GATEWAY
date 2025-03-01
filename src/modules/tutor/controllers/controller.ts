@@ -293,6 +293,19 @@ export default class TutorController {
           res.status(StatusCode.OK).json(result);
         })
     }
+
+    fetchUserDetails(req:Request, res:Response, next: NextFunction){
+        const userId = req.query.userId as string;
+        UserClient.GetUserDetails({ userId: userId }, (err:ServiceError | null , result:any)=> {
+            if(err){
+                console.log(err)
+                return res.status(500).send("Error from grpc servcie:"+ err.message);
+            }
+            console.log(result, 'result from fetching')
+            res.status(StatusCode.OK).json({result});
+
+        })
+    }
     
  
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
