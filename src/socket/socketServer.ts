@@ -18,9 +18,23 @@ export const setupSocket = (server: any) => {
     const io = new Server(server, {
         cors: {
             origin: ['http://localhost:5173', 'https://dowhilelearn.tech'], // Frontend URLs
-            methods: ['GET', 'POST'],
-            credentials: true // Allow cookies/auth headers if needed
-        }
+            methods: ['GET', 'POST', 'OPTIONS'],
+            credentials: true, // Allow cookies/auth headers if needed,
+            allowedHeaders: ['Content-Type', 'Authorization']
+        },
+                // Adjust transports to be more compatible across browsers
+        transports: ['polling', 'websocket'],
+        allowUpgrades: true,
+        pingTimeout: 30000,
+        pingInterval: 25000,
+        cookie: {
+            name: 'io',
+            path: '/',
+            httpOnly: true,
+            sameSite: 'none', // Important for cross-origin
+            secure: true // Required when sameSite is 'none'
+        },
+        maxHttpBufferSize: 1e8 // Increase buffer size if transferring large data
     });
 
     // JWT Secret (store in environment variable)
