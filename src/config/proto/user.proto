@@ -134,6 +134,21 @@ message AttachNameToReviewResponse {
     repeated UpdatedReviewData reviewData = 1; 
 }
 
+message UpdatedReviewData {
+  string userId = 1;
+  string courseId = 2;
+  int32 rating = 3;
+  string comment = 4;
+  string updatedAt = 5;
+  ImageAndName name = 6;
+}
+
+message ImageAndName {
+    string name = 1;
+    string imageUrl = 2;
+}
+
+
 message VerifyOTPResetPasswordRequest {
     string email = 1;
     string otpId = 2;
@@ -347,16 +362,6 @@ message ReviewData {
   string comment = 4;
   string updatedAt = 5;
 }
-
-message UpdatedReviewData {
-  string userId = 1;
-  string courseId = 2;
-  int32 rating = 3;
-  string comment = 4;
-  string updatedAt = 5;
-  string name = 6;
-}
-
 
 
 // chat room data

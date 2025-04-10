@@ -12,7 +12,7 @@ const controller = new UserController();
 const middlware = new isAuthenticated();
 app.use(cookieParser());
 
-
+ 
 userRoute.get("/test", (req,res)=>{res.send("User route working docker push .tech")});
 userRoute.get("/user/test", controller.test);
 userRoute.post("/register", controller.register);
