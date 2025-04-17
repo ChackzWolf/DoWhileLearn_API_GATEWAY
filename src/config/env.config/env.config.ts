@@ -1,6 +1,6 @@
 export const configs = {
     chatService: {
       host: 'chat-service',
-      port: 4002,
+      port: 4002
     },
   };
