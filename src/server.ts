@@ -61,7 +61,7 @@ app.use(cors({
   origin: (origin, callback) => { 
     const allowedOrigins = [
       'http://localhost:5173',
-      'https://dowhilelearn.tech'
+      'https://dowhilelearn.tech',
     ];
 
     console.log("CORS checking origin::", origin);
