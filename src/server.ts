@@ -39,7 +39,7 @@ const logger = winston.createLogger({
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'healthy' });
+  res.status(200).json({ status: 'healthy valare' });
 });
 
 app.use(morgan('combined', {
