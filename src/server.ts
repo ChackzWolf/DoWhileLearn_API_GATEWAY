@@ -39,7 +39,7 @@ const logger = winston.createLogger({
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'healthy valare valare' });
+  res.status(200).json({ status: 'healthy Refreshing server 4: changed docker to latest' });
 });
 
 app.use(morgan('combined', {
