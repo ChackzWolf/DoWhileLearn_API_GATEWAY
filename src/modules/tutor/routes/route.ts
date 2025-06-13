@@ -25,7 +25,7 @@ tutorRoute.post("/googleAuth", controller.tutorGoogleAuth)
 
 
 
-tutorRoute.get("/fetchStudentData" , middleware.checkTutorBlocked, controller.fetchUserDetails);
+tutorRoute.get("/fetchUserDetails" , middleware.checkTutorBlocked, controller.fetchUserDetails);
 tutorRoute.get("/fetchTutorDetails", controller.fetchTutorDetails)
 tutorRoute.get("/fetchTutorCourse",middleware.checkTutorBlocked,controller.fetchTutorCourse)
 tutorRoute.get("/fetchOrdersOfTutor",middleware.checkTutorBlocked, controller.fetchOrdersOfTutor)
