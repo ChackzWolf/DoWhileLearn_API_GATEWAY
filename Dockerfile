@@ -1,4 +1,3 @@
-# Stage 1: Build the application
 FROM node:18-alpine AS builder
 
 WORKDIR /usr/src/app
@@ -12,7 +11,6 @@ COPY src/config/proto ./src/config/proto
 
 RUN npm run build
 
-# Stage 2: Production image
 FROM node:18-alpine
 
 WORKDIR /usr/src/app

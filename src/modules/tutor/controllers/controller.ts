@@ -307,7 +307,7 @@ export default class TutorController {
         })
     }
     
- 
+
     sendOtpToEmail(req: Request, res: Response, next: NextFunction){
         console.log('tutor trig',req.body)
         TutorClient.SendOtpToEmail(req.body, (err:ServiceError | null, result: any)=> {

@@ -29,11 +29,11 @@ const logger = winston.createLogger({
     winston.format.json()
   ), 
   transports: [  
-    new winston.transports.Console(), // Log to the console
+    new winston.transports.Console(), 
     new DailyRotateFile({
       filename: 'logs/application-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      maxFiles: '7d' // Keep logs for 14 days
+      maxFiles: '7d'
     })
   ],  
 });

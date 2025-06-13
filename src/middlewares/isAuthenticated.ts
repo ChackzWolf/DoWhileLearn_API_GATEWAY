@@ -1,6 +1,6 @@
 import { UserClient } from "../config/grpc-client/userClient";
 import { Request, Response, NextFunction } from "express";
-import { ServiceError } from "@grpc/grpc-js"; // Correctly import ServiceError
+import { ServiceError } from "@grpc/grpc-js";
 import { TutorClient } from "../config/grpc-client/tutorClient";
 import { AuthClient } from "../config/grpc-client/authClient";
 
